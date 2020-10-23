@@ -1,0 +1,23 @@
+{
+  "name": "contribution-parse",
+  "version": "1.0.0",
+  "description": "Git conributions parse",
+  "main": "src/main.js",
+  "scripts": {
+    "test": "echo test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/async-devil/contribution-parse.git"
+  },
+  "keywords": [
+    "Git",
+    "Parsing"
+  ],
+  "author": "async-devil",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/async-devil/contribution-parse/issues"
+  },
+  "homepage": "https://github.com/async-devil/contribution-parse#readme"
+}

@@ -10,14 +10,18 @@
     "type": "git",
     "url": "git+https://github.com/async-devil/contribution-parse.git"
   },
-  "keywords": [
-    "Git",
-    "Parsing"
-  ],
+  "keywords": ["Git", "Parsing"],
   "author": "async-devil",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/async-devil/contribution-parse/issues"
   },
-  "homepage": "https://github.com/async-devil/contribution-parse#readme"
+  "homepage": "https://github.com/async-devil/contribution-parse#readme",
+  "devDependencies": {
+    "eslint": "^7.11.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "nodemon": "^2.0.4"
+  }
 }

@@ -4,7 +4,7 @@
   "description": "Git conributions parse",
   "main": "src/main.js",
   "scripts": {
-    "test": "echo test"
+    "run": "nodemon src/main.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,9 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
     "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "request": "^2.88.2"
   }
 }

@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 
 const user = 'async-devil';
 const url = `https://github.com/users/${user}/contributions`;
-let contributions;
+let contributions; //TODO: fix lint errors
 
 request(url, (error, response, body) => {
   if (!error) {

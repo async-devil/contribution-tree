@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/async-devil/contribution-tree.git"
   },
-  "keywords": ["Git", "Parsing"],
+  "keywords": ["Git", "Parsing", "Visualization"],
   "author": "async-devil",
   "license": "MIT",
   "bugs": {

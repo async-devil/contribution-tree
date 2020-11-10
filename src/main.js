@@ -3,15 +3,14 @@ const cheerio = require('cheerio');
 
 const user = 'async-devil';
 const url = `https://github.com/users/${user}/contributions`;
-let contributions; //TODO: fix lint errors
+let contributions;
 
 request(url, (error, response, body) => {
   if (!error) {
     const $ = cheerio.load(body);
-    contributions = $('.js-calendar-graph-svg').html();
+    contributions = $('g').find('rect').toString();
+    console.log(contributions);
   } else {
     throw new Error(error);
   }
 });
-
-export { contributions as default };

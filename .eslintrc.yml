@@ -1,6 +1,10 @@
-parserOptions:
-  ecmaVersion:                        6
-  sourceType:                         'module'
+parserOptions: 
+    ecmaVersion: 6
+    sourceType: "module"
 
-rules:
-  no-console:                         'off'
+rules: 
+  no-console: "off"
+
+extends: 
+  - "prettier"
+  

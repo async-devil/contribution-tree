@@ -7,12 +7,12 @@ env:
 
 extends:
  - "airbnb-base"
- - "prettier"
+ - "plugin:prettier/recommended"
 
 plugins:
   - "babel"
   - "import"
-  - "prettier"
+  - "plugin:prettier"
 
 parser: "babel-eslint"
 
@@ -22,4 +22,4 @@ parserOptions:
 
 rules: 
   no-console: "off"
-  prettier/prettier: ['error']
+  prettier/prettier: "error"

@@ -2,9 +2,9 @@
   "name": "contribution-tree",
   "version": "1.0.0",
   "description": "Git conributions parse",
-  "main": "src/main.ts",
+  "main": "src/index.ts",
   "scripts": {
-    "start": "nodemon src/main.ts",
+    "start": "nodemon src/index.ts",
     "lint": "eslint"
   },
   "repository": {
@@ -23,19 +23,30 @@
   },
   "homepage": "https://github.com/async-devil/contribution-tree#readme",
   "devDependencies": {
-    "babel-eslint": "^10.1.0",
     "eslint": "^7.13.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-import": "^2.22.1",
     "nodemon": "^2.0.4",
-    "prettier": "2.1.2"
+    "prettier": "2.1.2",
+    "ts-node": "^9.0.0"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
+    "express": "^4.17.1",
+    "hbs": "^4.1.1",
     "request": "^2.88.2",
-    "ts-node": "^9.0.0",
     "typescript": "^4.0.5"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      ".git",
+      "/node_modules",
+      "*.js",
+      "/.vscode",
+      "/config",
+      "*.json"
+    ],
+    "ext": "ts,hbs"
   }
 }

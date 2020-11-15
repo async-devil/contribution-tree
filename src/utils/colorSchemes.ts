@@ -1,20 +1,11 @@
-interface Colors {
-  colorErr: string,
-  colorBg: string,
-  colorL1: string,
-  colorL2: string,
-  colorL3: string,
-  colorL4: string,
+interface Data {
+	[ key: string ]: any; 
 }
 
-interface ColorSchemes {
-  default: Colors,
-  sakura: Colors,
-}
-
-const colorsSchemes:ColorSchemes = {
+//! Please use colors in the same format
+const colorsSchemes:Data = {
   default: {
-    colorErr: '#000000', //^ Why not?
+    colorErr: '#000000',
     colorBg: '#ebedf0',
     colorL1: '#9be9a8',
     colorL2: '#40c463',

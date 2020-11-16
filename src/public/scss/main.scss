@@ -1,0 +1,39 @@
+body {
+  width: 100%;
+  height: 100%;
+}
+
+svg {
+  height: 500px;
+  width: 800px;
+}
+
+svg .grid {
+  stroke: #acacac;
+  stroke-width: 0.3;
+}
+
+svg .points {
+  stroke: #acacac;
+  stroke-width: 3;
+}
+
+svg .grid.double {
+  stroke-opacity: 0.4;
+}
+
+svg .labels {
+  font-family: Arial;
+  font-size: 14px;
+  kerning: 1;
+}
+
+svg .labels.x-labels {
+  text-anchor: middle;
+}
+
+svg .labels.y-labels {
+  text-anchor: end;
+}
+
+

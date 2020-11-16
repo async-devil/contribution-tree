@@ -3,12 +3,19 @@ const cheerio = require('cheerio');
 import schemes from './colorSchemes';
 
 const importValues = {
-  scheme: 'default',
+  scheme: 'blue',
   user: 'async-devil', //TODO: Import it from RestAPI (GraphQL)
 }
 
 const {scheme, user} = importValues;
 const url = `https://github.com/users/${user}/contributions`;
+//* Grabbing theme from schemes
+let selectedScheme = schemes[scheme];
+
+//* Checking if scheme does exists
+if (selectedScheme === undefined) {
+  selectedScheme = schemes['default']
+}
 
 interface Data {
   color: string,
@@ -18,12 +25,8 @@ interface Data {
 
 const filter = (array:string) => {
   const colorMatch = (string:string) => {
-    //* Grabbing theme from schemes
-    const selectedScheme = schemes[scheme];
-
     //* Searching for L{num} if not found, null
-    let match:string[]|null = string.match(/L\d/gm); //
-
+    let match:string[]|null = string.match(/L\d/gm);
     if (match === null) return selectedScheme.colorBg;
     switch (match[0]) {
         case 'L1':
@@ -70,4 +73,9 @@ request(url, (error:any, response:any, body:any) => {
   }
 });
 
-export {contributionsFiltered as default};
+const data = {
+  contributionsData: contributionsFiltered,
+  selectedTheme: selectedScheme,
+}
+
+export {data as default};

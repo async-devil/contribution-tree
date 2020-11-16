@@ -4,8 +4,9 @@
   "description": "Git conributions parse",
   "main": "src/index.ts",
   "scripts": {
-    "start": "nodemon src/index.ts",
-    "lint": "eslint"
+    "lint": "eslint",
+    "watch-code": "nodemon src/index.ts",
+    "watch-scss": "sass --watch src/public/scss:src/public/css"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "eslint-plugin-import": "^2.22.1",
     "nodemon": "^2.0.4",
     "prettier": "2.1.2",
+    "sass": "^1.29.0",
     "ts-node": "^9.0.0"
   },
   "dependencies": {
@@ -47,6 +49,6 @@
       "/config",
       "*.json"
     ],
-    "ext": "ts,hbs"
+    "ext": "ts,hbs,scss"
   }
 }

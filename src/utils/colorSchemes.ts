@@ -6,11 +6,11 @@ interface Data {
 const colorsSchemes:Data = {
   default: {
     colorErr: '#000000',
-    colorBg: '#ebedf0',
-    colorL1: '#9be9a8',
-    colorL2: '#40c463',
-    colorL3: '#30a14e',
-    colorL4: '#216e39',
+    colorBg: '#8ed7a5',
+    colorL1: '#63c783',
+    colorL2: '#3aa25b',
+    colorL3: '#30854b',
+    colorL4: '#26683b',
   },
   sakura: {
     colorErr: '#000000',
@@ -19,6 +19,14 @@ const colorsSchemes:Data = {
     colorL2: '#cd648d',
     colorL3: '#c44677',
     colorL4: '#9d325c',
+  },
+  blue: {
+    colorErr: '#000000',
+    colorBg: '#66b5cb',
+    colorL1: '#3e9db8',
+    colorL2: '#34849b',
+    colorL3: '#2a6b7e',
+    colorL4: '#205261',
   },
 };
 

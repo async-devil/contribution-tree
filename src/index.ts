@@ -14,6 +14,10 @@ const port = process.env.PORT || 3000;
 app.set("view engine", "hbs");
 app.set("views", viewsDirPath);
 hbs.registerPartials(partialsDirPath);
+let factor:number = 1;
+hbs.registerHelper("_", function(a:number){
+  return a * factor;
+});
 
 app.use(express.static(publicDirPath));
 /*------------------------------------*/
@@ -30,7 +34,7 @@ app.get("", (req:any, res:any) => {
 
       color: data.contributionsData[i].color,
       contributions: data.contributionsData[i].contributions,
-      date: data.contributionsData[i].date
+      date: data.contributionsData[i].date,
     });
 });
 /*------------------------------------*/

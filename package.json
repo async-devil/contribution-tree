@@ -5,8 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "lint": "eslint",
-    "watch-code": "nodemon src/index.ts",
-    "watch-scss": "sass --watch src/public/scss:src/public/css"
+    "start-code": "nodemon src/index.ts",
+    "start-scss": "sass --watch src/public/scss:src/public/css"
   },
   "repository": {
     "type": "git",

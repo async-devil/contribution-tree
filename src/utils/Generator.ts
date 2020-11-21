@@ -1,5 +1,3 @@
-import { ModuleResolutionKind } from "typescript";
-
 interface Info {
     multiplySymbol:string,
     //* All X info
@@ -35,7 +33,7 @@ const line = function (x1:number, y1:number, x2:number, y2:number, symb:string):
 };
 const globalEnd:string = `</g>`;
 
-const xLines = function(num:number):string {
+const xLines = function (num:number):string {
     let buffer:string[] = []
     for (let i = 0; i <= num; i++) {
         let y:number

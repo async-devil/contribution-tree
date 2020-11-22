@@ -1,49 +1,94 @@
 interface Info {
-    multiplySymbol:string,
-    //* All X info
-    startXfrom:number,
-    endXon:number,
-    //* All Y info
-    startYfrom:number,
-    endYon:number,
-    //* All width and height parametrs
-    insideWidth:number,
-    insideHeight:number,
-    outsideWidth:number,
-    outsideHeight:number,
+  multiplySymbol: string;
+  rows: number;
+  columns: number;
+  startPoints: {
+    x: number;
+    y: number;
+  };
+  insideWidth: number;
+  insideHeight: number;
+  outsideWidth: number;
+  outsideHeight: number;
 }
 
-const data:Info = { //TODO: make finally REST API
-    multiplySymbol: "_",
-    startXfrom: 0,
-    endXon: 210,
-    startYfrom: 10,
-    endYon: 110,
-    insideWidth: 200,
-    insideHeight: 100,
-    outsideWidth: 10,
-    outsideHeight: 10,
-}
-
-const globalStart = function (value:string):string {
-        return `<g class="grid ${value}-grid">`
+const svgStart = function (width: number, height: number, symb: string): string {
+  return `<svg width="{{${symb} ${width}}}" height="{{${symb} ${height}}}">`;
 };
-const line = function (x1:number, y1:number, x2:number, y2:number, symb:string):string {
-    return `<line x1="{{${symb} ${x1}}}" y1="{{${symb} ${y1}}}" x2="{{${symb} ${x2}}}" y2="{{${symb} ${y2}}}"/>`
+const globalStart = function (value: string): string {
+  return `<g class="grid ${value}-grid">`;
 };
-const globalEnd:string = `</g>`;
+const line = function (x1: number, y1: number, x2: number, y2: number, symb: string): string {
+  return `<line x1="{{${symb} ${x1}}}" y1="{{${symb} ${y1}}}" x2="{{${symb} ${x2}}}" y2="{{${symb} ${y2}}}"/>`;
+};
+const globalEnd: string = `</g>`;
+const svgEnd: string = `</svg>`;
 
-const xLines = function (num:number):string {
-    let buffer:string[] = []
+const create = function (config: Info) {
+  let data = config;
+
+  if (data.startPoints.x < 0 || data.startPoints.y < 0) {
+    Object.assign(data.startPoints, { x: 0, y: 0 });
+  }
+
+  const xLines = function (num: number): string {
+    let buffer: string[] = [];
     for (let i = 0; i <= num; i++) {
-        let y:number
-        y = data.insideHeight/num*i
-        if (i === 0) {
-            y = 0
-        }
-        buffer.push(line(data.startXfrom, y, data.endXon, y, data.multiplySymbol))
+      let y: number;
+      y = (data.insideHeight / num) * i + data.startPoints.y;
+      if (i === 0) {
+        y = data.startPoints.y;
+      }
+      buffer.push(
+        line(
+          data.startPoints.x,
+          y,
+          data.startPoints.x + data.insideWidth + data.outsideWidth,
+          y,
+          data.multiplySymbol,
+        ),
+      );
     }
-    return buffer.join("\n")
-}
+    return buffer.join('\n');
+  };
 
-export {xLines as default};
+  const yLines = function (num: number): string {
+    let buffer: string[] = [];
+    for (let i = 0; i <= num; i++) {
+      let x: number;
+      x = (data.insideWidth / num) * i + data.startPoints.x + data.outsideWidth;
+      if (i === 0) {
+        x = data.startPoints.x + data.outsideWidth;
+      }
+      buffer.push(
+        line(
+          x,
+          data.startPoints.y,
+          x,
+          data.insideHeight + data.outsideHeight + data.startPoints.y,
+          data.multiplySymbol,
+        ),
+      );
+    }
+    return buffer.join('\n');
+  };
+
+  let buffer: string[] = [];
+  buffer.push(
+    svgStart(
+      data.startPoints.x + data.outsideWidth + data.insideWidth,
+      data.insideHeight + data.outsideHeight + data.startPoints.y,
+      data.multiplySymbol,
+    ),
+    globalStart('x'),
+    xLines(data.rows - 1),
+    globalEnd,
+    globalStart('y'),
+    yLines(data.columns - 1),
+    globalEnd,
+    svgEnd,
+  );
+  return buffer.join('\n');
+};
+
+export { create as default };

@@ -1,5 +1,4 @@
 interface Info {
-  multiplySymbol: string;
   rows: number;
   columns: number;
   startPoints: {
@@ -10,85 +9,103 @@ interface Info {
   insideHeight: number;
   outsideWidth: number;
   outsideHeight: number;
+  factor: number;
 }
 
-const svgStart = function (width: number, height: number, symb: string): string {
-  return `<svg width="{{${symb} ${width}}}" height="{{${symb} ${height}}}">`;
-};
-const globalStart = function (value: string): string {
-  return `<g class="grid ${value}-grid">`;
-};
-const line = function (x1: number, y1: number, x2: number, y2: number, symb: string): string {
-  return `<line x1="{{${symb} ${x1}}}" y1="{{${symb} ${y1}}}" x2="{{${symb} ${x2}}}" y2="{{${symb} ${y2}}}"/>`;
-};
-const globalEnd: string = `</g>`;
-const svgEnd: string = `</svg>`;
+class Data {
+  readonly data: Info;
 
-const create = function (config: Info) {
-  let data = config;
-
-  if (data.startPoints.x < 0 || data.startPoints.y < 0) {
-    Object.assign(data.startPoints, { x: 0, y: 0 });
+  constructor(data: Info) {
+    this.data = data;
   }
 
-  const xLines = function (num: number): string {
-    let buffer: string[] = [];
-    for (let i = 0; i <= num; i++) {
-      let y: number;
-      y = (data.insideHeight / num) * i + data.startPoints.y;
-      if (i === 0) {
-        y = data.startPoints.y;
-      }
-      buffer.push(
-        line(
-          data.startPoints.x,
-          y,
-          data.startPoints.x + data.insideWidth + data.outsideWidth,
-          y,
-          data.multiplySymbol,
-        ),
-      );
-    }
-    return buffer.join('\n');
-  };
+  public svgStart(): string {
+    return `<svg width="${this.totalWidth() * this.data.factor}" height="${
+      this.totalHeight() * this.data.factor
+    }">`;
+  }
+  public gStart(value: string): string {
+    return `<g class="grid ${value}-grid">`;
+  }
+  public line(x1: number, y1: number, x2: number, y2: number): string {
+    return `<line x1="${x1 * this.data.factor}" y1="${y1 * this.data.factor}" x2="${
+      x2 * this.data.factor
+    }" y2="${y2 * this.data.factor}"/>`;
+  }
+  public gEnd: string = `</g>`;
+  public svgEnd: string = `</svg>`;
 
-  const yLines = function (num: number): string {
-    let buffer: string[] = [];
+  public totalWidth(): number {
+    return this.data.startPoints.x + this.data.insideWidth + this.data.outsideWidth;
+  }
+  public totalHeight(): number {
+    return this.data.insideHeight + this.data.outsideHeight + this.data.startPoints.y;
+  }
+
+  public startXPoints(num: number): number[] {
+    let buffer: number[] = [];
     for (let i = 0; i <= num; i++) {
       let x: number;
-      x = (data.insideWidth / num) * i + data.startPoints.x + data.outsideWidth;
+      x = (this.data.insideWidth / num) * i + this.data.startPoints.x + this.data.outsideWidth;
       if (i === 0) {
-        x = data.startPoints.x + data.outsideWidth;
+        x = this.data.startPoints.x + this.data.outsideWidth;
       }
-      buffer.push(
-        line(
-          x,
-          data.startPoints.y,
-          x,
-          data.insideHeight + data.outsideHeight + data.startPoints.y,
-          data.multiplySymbol,
-        ),
-      );
+      buffer.push(x);
     }
+    return buffer;
+  }
+  public startYPoints(num: number): number[] {
+    let buffer: number[] = [];
+    for (let i = 0; i <= num; i++) {
+      let y: number;
+      y = (this.data.insideHeight / num) * i + this.data.startPoints.y;
+      if (i === 0) {
+        y = this.data.startPoints.y;
+      }
+      buffer.push(y);
+    }
+    return buffer;
+  }
+}
+
+class Lines extends Data {
+  constructor(data: Info) {
+    super(data);
+  }
+
+  public initX() {
+    let buffer: string[] = [];
+    let yVals = this.startYPoints(this.data.rows - 1);
+    buffer.push(this.gStart('x'));
+    for (let i = 0; i < yVals.length; i += 1) {
+      buffer.push(this.line(this.data.startPoints.x, yVals[i], this.totalWidth(), yVals[i]));
+    }
+    buffer.push(this.gEnd);
     return buffer.join('\n');
-  };
+  }
 
-  let buffer: string[] = [];
-  buffer.push(
-    svgStart(
-      data.startPoints.x + data.outsideWidth + data.insideWidth,
-      data.insideHeight + data.outsideHeight + data.startPoints.y,
-      data.multiplySymbol,
-    ),
-    globalStart('x'),
-    xLines(data.rows - 1),
-    globalEnd,
-    globalStart('y'),
-    yLines(data.columns - 1),
-    globalEnd,
-    svgEnd,
-  );
-  return buffer.join('\n');
-};
+  public initY() {
+    let buffer: string[] = [];
+    let xVals = this.startXPoints(this.data.columns - 1);
+    buffer.push(this.gStart('y'));
+    for (let i = 0; i < xVals.length; i += 1) {
+      buffer.push(this.line(xVals[i], this.data.startPoints.y, xVals[i], this.totalHeight()));
+    }
+    buffer.push(this.gEnd);
+    return buffer.join('\n');
+  }
+}
 
-export { create as default };
+class Generator extends Lines {
+  constructor(data: Info) {
+    super(data);
+  }
+
+  public generate() {
+    let buffer: string[] = [];
+    buffer.push(this.svgStart(), this.initX(), this.initY(), this.svgEnd);
+    return buffer.join('\n');
+  }
+}
+
+export { Generator, Info };

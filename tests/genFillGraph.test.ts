@@ -1,4 +1,4 @@
-import { Generator, Info } from '../utils/generator';
+import { StandartGraph, Info } from '../api/StandartGraph/StandartGraph';
 
 test('Generating 5x5 graph', () => {
   const info: Info = {
@@ -15,7 +15,7 @@ test('Generating 5x5 graph', () => {
     factor: 1,
   };
 
-  let graph = new Generator(info);
+  let graph = new StandartGraph(info);
   expect(graph.generate()).toBe(`<svg width="210" height="110">
 <g class="grid x-grid">
 <line x1="0" y1="0" x2="210" y2="0"/>
@@ -49,7 +49,7 @@ test('Generating 5x5 graph with start points(20;20)', () => {
     factor: 1,
   };
 
-  let graph = new Generator(info);
+  let graph = new StandartGraph(info);
   expect(graph.generate()).toBe(`<svg width="230" height="130">
 <g class="grid x-grid">
 <line x1="20" y1="20" x2="230" y2="20"/>
@@ -83,7 +83,7 @@ test('Generating 5x5 graph with factor 2', () => {
     factor: 2,
   };
 
-  let graph = new Generator(info);
+  let graph = new StandartGraph(info);
   expect(graph.generate()).toBe(`<svg width="420" height="220">
 <g class="grid x-grid">
 <line x1="0" y1="0" x2="420" y2="0"/>
@@ -117,7 +117,7 @@ test('Generating 5x5 graph with factor 2 and start points(20;20)', () => {
     factor: 2,
   };
 
-  let graph = new Generator(info);
+  let graph = new StandartGraph(info);
   expect(graph.generate()).toBe(`<svg width="460" height="260">
 <g class="grid x-grid">
 <line x1="40" y1="40" x2="460" y2="40"/>

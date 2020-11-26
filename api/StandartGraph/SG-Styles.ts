@@ -1,4 +1,14 @@
-import { themes } from '../../themes/SG-themes';
+import { themes, Theme } from '../../themes/SG-themes';
+
+interface gradient {
+  gradientParams: Array<Array<string>>;
+  degrees: string;
+}
+
+interface ArrayWithArrayOrNullAndStringOrNull {
+  color: string | null;
+  gradient: gradient | null;
+}
 
 class Styles {
   private choice: string;
@@ -7,7 +17,7 @@ class Styles {
     this.choice = choice;
   }
 
-  public matchTheme(): Object {
+  public matchTheme(): Theme {
     return themes[this.choice] || themes.default;
   }
 
@@ -20,9 +30,11 @@ class Styles {
     return deg;
   }
 
-  public degToXY(deg: number): string {
+  public degToXY(deg: string): string {
     //^Transforms degrees to svg form
-    let degrees: number = this.degToStandartOnes(deg);
+    let degInt = parseInt(deg.replace('%', ''));
+
+    let degrees: number = this.degToStandartOnes(degInt);
 
     function fill(x1: number, y1: number, x2: number, y2: number) {
       return `x1="${x1}%" y1="${y1}%" x2="${x2}%" y2="${y2}%"`;
@@ -41,7 +53,8 @@ class Styles {
     return fill(0, 100, 0, 0);
   }
 
-  public gradientParamsToSVG(array: string[][], XY: string, id: string) {
+  public gradientParamsToSVG(array: Array<Array<string>>, XY: string, id: string) {
+    //^ Making SVG gradient code
     function fill(percent: string, hex: string) {
       return `<stop offset="${percent}" stop-color=${hex}/>`;
     }
@@ -50,14 +63,15 @@ class Styles {
 
     buffer.push(`<linearGradient id="${id}" ${XY}>`);
     for (let index = 0; index < array.length; index++) {
-      buffer.push(fill(array[index][1], array[index][0]));
+      //^ If percent - undefined, returns 0%
+      buffer.push(fill(array[index][1], array[index][0] || '0%'));
     }
     buffer.push('</linearGradient>');
 
     return buffer.join('\n');
   }
 
-  public cssColorToGradientParams(value: string) {
+  public cssColorToGradientParamsOrHexAndNull(value: string): ArrayWithArrayOrNullAndStringOrNull {
     //^ Searching for linear-gradient
     if (value.search(/^l.*t/gm) !== -1) {
       //^ Deleting useless stuff and spliting by comma
@@ -67,9 +81,10 @@ class Styles {
       //^ Searching for degrees, if not found - null
       data.degrees = result[0].match(/^\d+deg/gm);
       if (data.degrees !== null) data.degrees = data.degrees[0];
+      else data.degrees = '0%';
 
       data.gradientParams = [];
-      //^ Making array like [['#000', '0%']]
+      //^ Making array like [['#000000', '0%']]
       for (let i = 0; i < result.length; i++) {
         if (result[i].match(/^\d+deg/gm)) continue;
 
@@ -77,12 +92,34 @@ class Styles {
         data.gradientParams.push(buffer);
       }
 
-      return [null, data];
-    } else if (value.search(/^#\w+$/gm) !== -1) {
+      return {
+        color: null,
+        gradient: { gradientParams: data.gradientParams, degrees: data.degress },
+      };
+    } else if (value.search(/^#[0-9a-fA-F]{6}$/gm) !== -1) {
       //^ Searching for hex color
-      return [value, null];
+      return { color: value, gradient: null };
     } else {
-      return ['#e0e', null];
+      //^ If wrote something that is not the standart hex color
+      return { color: '#EE00EE', gradient: null };
+    }
+  }
+
+  public dataHandler() {
+    //^ Only way I've found
+    let $this = this;
+    let selectedTheme: any = this.matchTheme();
+    let buffer = { gradient: null };
+
+    function findGradientOrHex(value: string) {
+      let handledValue = $this.cssColorToGradientParamsOrHexAndNull(value);
+
+      if (handledValue.color === null && handledValue.gradient !== null) {
+        return $this.gradientParamsToSVG(
+          handledValue.gradient.gradientParams,
+          $this.degToXY(handledValue.gradient.degrees), //TODO: finish id part
+        );
+      }
     }
   }
 
@@ -108,7 +145,8 @@ class Styles {
       .surfaces {
         fill: //TODO
       }
-    	</style>
+      </style>
+      
 		`;
   }
 }

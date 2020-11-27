@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <svg width="720" height="410">
+        <g class="grid x-grid" id="xGrid">
+            <line x1="113" x2="113" y1="10" y2="380"></line>
+            <line x1="259" x2="259" y1="10" y2="380"></line>
+            <line x1="405" x2="405" y1="10" y2="380"></line>
+            <line x1="551" x2="551" y1="10" y2="380"></line>
+            <line x1="697" x2="697" y1="10" y2="380"></line>
+        </g>
+        <g class="grid y-grid" id="yGrid">
+            <line x1="86" x2="697" y1="10" y2="10"></line>
+            <line x1="86" x2="697" y1="68" y2="68"></line>
+            <line x1="86" x2="697" y1="126" y2="126"></line>
+            <line x1="86" x2="697" y1="185" y2="185"></line>
+            <line x1="86" x2="697" y1="243" y2="243"></line>
+            <line x1="86" x2="697" y1="301" y2="301"></line>
+            <line x1="86" x2="697" y1="360" y2="360"></line>
+        </g>
+        <g class="first_set points" data-setname="Our first data set">
+            <circle cx="113" cy="192" data-value="7.2" r="2"></circle>
+            <circle cx="259" cy="171" data-value="8.1" r="2"></circle>
+            <circle cx="405" cy="179" data-value="7.7" r="2"></circle>
+            <circle cx="551" cy="200" data-value="6.8" r="2"></circle>
+            <circle cx="697" cy="204" data-value="6.7" r="2"></circle>
+        </g>
+        <g class="surfaces">
+            <path class="first_set" d="M113,360 L113,192 L259,171 L405,179 L551,200 L697,204 L697,360 Z"></path>
+        </g>
+
+        <style type="text/css">
+            body {
+                width: 100%;
+                height: 100%;
+            }
+
+            svg {
+                fill:
+            }
+
+            .grid {
+                stroke: #fff;
+                stroke-width: 0.2;
+            }
+
+            .points {
+                fill: #000;
+            }
+
+            .surfaces {
+                background: linear-gradient(0deg, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%);
+            }
+        </style>
+    </svg>
+</body>
+
+</html>

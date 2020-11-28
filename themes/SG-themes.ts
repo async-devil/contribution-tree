@@ -6,7 +6,7 @@ interface Data {
 interface Theme {
   background: string;
   line: string;
-  graph: string;
+  surface: string;
   points: string;
 }
 
@@ -15,25 +15,28 @@ const themes: Data = {
     line: '#7a7a7a',
     background: '#ffffff',
     points: '#000000',
-    graph: '#3aa25b',
+    surface: '#3aa25b',
   },
   greenGradient: {
     line: '#7a7a7a',
     background: '#ffffff',
     points: '#000000',
-    graph: 'linear-gradient(0deg, #8ed7a5 0%, #63c783 25%, #3aa25b 50%, #30854b 75%, #26683b 100%)',
+    surface:
+      'linear-gradient(0deg, Gradient1, #8ed7a5 0%, #63c783 25%, #3aa25b 50%, #30854b 75%, #26683b 100%)',
   },
   sakuraGradient: {
     line: '#7a7a7a',
     background: '#ffffff',
     points: '#000000',
-    graph: 'linear-gradient(0deg, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+    surface:
+      'linear-gradient(0deg, Gradient1, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
   },
   blueGradient: {
     line: '#7a7a7a',
     background: '#ffffff',
     points: '#000000',
-    graph: 'linear-gradient(0deg, #66b5cb 0%, #3e9db8 25%, #34849b 50%, #2a6b7e 75%, #205261 100%)',
+    surface:
+      'linear-gradient(0deg, Gradient1, #66b5cb 0%, #3e9db8 25%, #34849b 50%, #2a6b7e 75%, #205261 100%)',
   },
 };
 

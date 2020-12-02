@@ -13,6 +13,14 @@ interface isGradientOutput {
   error?: string;
 }
 
+interface regexCutOutput {
+  error?: string;
+  result?: {
+    degrees: string;
+    id: string;
+    points: Array<Array<string>>;
+  };
+}
 class GradientToSVGFormat {
   public isGradient(input: string) {
     //^ If input contains rgb(...), returns false
@@ -78,7 +86,37 @@ class GradientToSVGFormat {
     return output;
   }
 
-  public regexCut() {}
+  public regexCut(input: string) {
+    //^ Checking if input is a valid gradient
+    const isGradient = this.isGradient(input);
+    if (isGradient.result === false) {
+      //^ If not returns error description
+      let output: regexCutOutput = { error: isGradient.error };
+      return output;
+    }
+
+    //^ Slicing up input
+    let cuttedAndSlicedInput = input.replace(/(^l.*?\()|(\)$)/gm, '').split(',');
+    for (let i = 0; i < cuttedAndSlicedInput.length; i += 1) {
+      cuttedAndSlicedInput[i] = cuttedAndSlicedInput[i].replace(/^ /gm, '');
+    }
+
+    //^ Getting points
+    let inputPoints: Array<Array<string>> = [];
+    for (let i = 0; i < cuttedAndSlicedInput.length - 2; i += 1) {
+      inputPoints[i] = cuttedAndSlicedInput[i + 2].split(' ');
+    }
+
+    //^ Composing output
+    let output: regexCutOutput = {
+      result: {
+        degrees: cuttedAndSlicedInput[0],
+        id: cuttedAndSlicedInput[1],
+        points: inputPoints,
+      },
+    };
+    return output; //TODO: write tests
+  }
 }
 
 export { Styles, GradientToSVGFormat };

@@ -18,7 +18,7 @@ describe('IsGradient method tests', () => {
         GTSF.isGradient(
           'linear-gradient(0deg, id=Gradient1, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
         ),
-      ).toBe(true);
+      ).toStrictEqual({ result: true });
     });
 
     test('Gradient test with correct value with 3 numbers hex', () => {
@@ -27,7 +27,7 @@ describe('IsGradient method tests', () => {
         GTSF.isGradient(
           'linear-gradient(0deg, id=Gradient1, #e5a 0%, #d78 25%, #cd6 50%, #c44 75%, #9d3 100%)',
         ),
-      ).toBe(true);
+      ).toStrictEqual({ result: true });
     });
 
     test('Gradient test without linear-gradient() prefix', () => {
@@ -36,7 +36,7 @@ describe('IsGradient method tests', () => {
         GTSF.isGradient(
           '0deg, id=Gradient1, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%',
         ),
-      ).toBe(true);
+      ).toStrictEqual({ result: true });
     });
   });
 
@@ -47,7 +47,7 @@ describe('IsGradient method tests', () => {
         GTSF.isGradient(
           'linear-gradient(0d, id=Gradient1, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
         ),
-      ).toBe(false);
+      ).toStrictEqual({ result: false, error: 'Invalid degrees' });
     });
 
     test('Gradient test with incorrect id', () => {
@@ -56,7 +56,7 @@ describe('IsGradient method tests', () => {
         GTSF.isGradient(
           'linear-gradient(0deg, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
         ),
-      ).toBe(false);
+      ).toStrictEqual({ result: false, error: 'Invalid ID' });
     });
 
     test('Gradient test with rgb', () => {
@@ -65,7 +65,7 @@ describe('IsGradient method tests', () => {
         GTSF.isGradient(
           'linear-gradient(0deg, id=Gradient1, #e5afc4 0%, #d782a3 25%, rgb(0,0,99) 50%, #c44677 75%, #9d325c 100%)',
         ),
-      ).toBe(false);
+      ).toStrictEqual({ result: false, error: 'Invalid color' });
     });
 
     test('Gradient test with incorrect percentage in stop info', () => {
@@ -74,7 +74,7 @@ describe('IsGradient method tests', () => {
         GTSF.isGradient(
           'linear-gradient(0deg, id=Gradient1, #e5afc4 0%, #d782a3 25, #cd648d 50%, #c44677 75%, #9d325c 100%)',
         ),
-      ).toBe(false);
+      ).toStrictEqual({ result: false, error: 'Invalid percentage' });
     });
 
     test('Gradient test with incorrect hex in stop info', () => {
@@ -83,17 +83,23 @@ describe('IsGradient method tests', () => {
         GTSF.isGradient(
           'linear-gradient(0deg, id=Gradient1, #e5afc4 0%, #d782 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
         ),
-      ).toBe(false);
+      ).toStrictEqual({ result: false, error: 'Invalid color' });
     });
 
     test('Gradient test with non gradient info', () => {
       let GTSF = new GradientToSVGFormat();
-      expect(GTSF.isGradient('#e5afc4')).toBe(false);
+      expect(GTSF.isGradient('#e5afc4')).toStrictEqual({
+        result: false,
+        error: 'Invalid gradient data',
+      });
     });
 
     test('Gradient test without stop point info', () => {
       let GTSF = new GradientToSVGFormat();
-      expect(GTSF.isGradient('linear-gradient(0deg, id=Gradient1)')).toBe(false);
+      expect(GTSF.isGradient('linear-gradient(0deg, id=Gradient1)')).toStrictEqual({
+        result: false,
+        error: 'Invalid gradient data',
+      });
     });
 
     test('Gradient test without linear-gradient prefix', () => {
@@ -102,7 +108,7 @@ describe('IsGradient method tests', () => {
         GTSF.isGradient(
           '(0deg, id=Gradient1, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
         ),
-      ).toBe(false);
+      ).toStrictEqual({ result: false, error: 'Invalid degrees' });
     });
   });
 });

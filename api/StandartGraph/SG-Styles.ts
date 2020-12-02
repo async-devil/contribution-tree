@@ -8,23 +8,33 @@ class Styles {
   }
 }
 
+interface isGradientOutput {
+  result: boolean;
+  error?: string;
+}
+
 class GradientToSVGFormat {
   public isGradient(input: string) {
     //^ If input contains rgb(...), returns false
-    if (input.search(/rgb\(.*?\)/gm) !== -1)
-      return { result: false, error: 'Contains invalid color' };
+    if (input.search(/rgb\(.*?\)/gm) !== -1) {
+      let output: isGradientOutput = { result: false, error: 'Invalid color' };
+      return output;
+    }
 
     //^ Getting gradient information in [deg, id, stops] format
     let gradientDataArray = input.replace(/(^l.*?\()|(\)$)/gm, '').split(',');
 
-    console.log(gradientDataArray); //TODO: delete this debug log
-
     //^ If nothing found returns false
-    if (gradientDataArray.length === 0)
-      return { result: false, error: 'Gradient contains nothing' }; //TODO: errors
+    if (gradientDataArray.length === 0) {
+      let output: isGradientOutput = { result: false, error: 'Invalid gradient data' };
+      return output;
+    }
 
     //^ If number of arguments less than 3 returns false
-    if (gradientDataArray.length < 3) return false;
+    if (gradientDataArray.length < 3) {
+      let output: isGradientOutput = { result: false, error: 'Invalid gradient data' };
+      return output;
+    }
 
     //^ Deleting first space if they are exist
     for (let i = 0; i < gradientDataArray.length; i += 1) {
@@ -32,10 +42,16 @@ class GradientToSVGFormat {
     }
 
     //^ If number with deg not found then returns false
-    if (gradientDataArray[0].search(/^\d{0,3}deg$/gm) === -1) return false;
+    if (gradientDataArray[0].search(/^\d{0,3}deg$/gm) === -1) {
+      let output: isGradientOutput = { result: false, error: 'Invalid degrees' };
+      return output;
+    }
 
     //^ If id not found returns false
-    if (gradientDataArray[1].search(/^id=.*$/gm) === -1) return false;
+    if (gradientDataArray[1].search(/^id=.*$/gm) === -1) {
+      let output: isGradientOutput = { result: false, error: 'Invalid ID' };
+      return output;
+    }
 
     //^ Getting color and percentage into an array in array
     let gradientStopsInfo: Array<Array<string>> = [];
@@ -46,14 +62,20 @@ class GradientToSVGFormat {
     //^ Grabbing each of stop point properties
     for (let i = 0; i < gradientStopsInfo.length; i += 1) {
       //^ Checking if color is a hex, if not returns false
-      if (gradientStopsInfo[i][0].search(/(^#[0-9a-fA-F]{3}$)|(^#[0-9a-fA-F]{6}$)/gm) === -1)
-        return false;
+      if (gradientStopsInfo[i][0].search(/(^#[0-9a-fA-F]{3}$)|(^#[0-9a-fA-F]{6}$)/gm) === -1) {
+        let output: isGradientOutput = { result: false, error: 'Invalid color' };
+        return output;
+      }
+
       //^ checking if percentage valid, if not returns false
       if (gradientStopsInfo[i][1].search(/^\d*%$/gm) === -1) {
-        return false;
+        let output: isGradientOutput = { result: false, error: 'Invalid percentage' };
+        return output;
       }
     }
-    return true;
+
+    let output: isGradientOutput = { result: true };
+    return output;
   }
 
   public regexCut() {}

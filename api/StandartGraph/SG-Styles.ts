@@ -21,11 +21,26 @@ interface regexCutOutput {
     points: Array<Array<string>>;
   };
 }
+
+interface gradientToSVGConstructOutput {
+  error?: string;
+  result?: {
+    html: string;
+    css: string;
+  };
+}
+
 class GradientToSVGFormat {
+  readonly info;
+
+  constructor(info: string) {
+    this.info = info;
+  }
+
   public isGradient(input: string) {
     //^ If input contains rgb(...), returns false
     if (input.search(/rgb\(.*?\)/gm) !== -1) {
-      let output: isGradientOutput = { result: false, error: 'Invalid color' };
+      const output: isGradientOutput = { result: false, error: 'Invalid color' };
       return output;
     }
 
@@ -34,13 +49,13 @@ class GradientToSVGFormat {
 
     //^ If nothing found returns false
     if (gradientDataArray.length === 0) {
-      let output: isGradientOutput = { result: false, error: 'Invalid gradient data' };
+      const output: isGradientOutput = { result: false, error: 'Invalid gradient data' };
       return output;
     }
 
     //^ If number of arguments less than 3 returns false
     if (gradientDataArray.length < 3) {
-      let output: isGradientOutput = { result: false, error: 'Invalid gradient data' };
+      const output: isGradientOutput = { result: false, error: 'Invalid gradient data' };
       return output;
     }
 
@@ -51,13 +66,13 @@ class GradientToSVGFormat {
 
     //^ If number with deg not found then returns false
     if (gradientDataArray[0].search(/^\d{0,3}deg$/gm) === -1) {
-      let output: isGradientOutput = { result: false, error: 'Invalid degrees' };
+      const output: isGradientOutput = { result: false, error: 'Invalid degrees' };
       return output;
     }
 
     //^ If id not found returns false
     if (gradientDataArray[1].search(/^id=".*"$/gm) === -1) {
-      let output: isGradientOutput = { result: false, error: 'Invalid ID' };
+      const output: isGradientOutput = { result: false, error: 'Invalid ID' };
       return output;
     }
 
@@ -71,18 +86,18 @@ class GradientToSVGFormat {
     for (let i = 0; i < gradientStopsInfo.length; i += 1) {
       //^ Checking if color is a hex, if not returns false
       if (gradientStopsInfo[i][0].search(/(^#[0-9a-fA-F]{3}$)|(^#[0-9a-fA-F]{6}$)/gm) === -1) {
-        let output: isGradientOutput = { result: false, error: 'Invalid color' };
+        const output: isGradientOutput = { result: false, error: 'Invalid color' };
         return output;
       }
 
       //^ checking if percentage valid, if not returns false
       if (gradientStopsInfo[i][1].search(/^\d*%$/gm) === -1) {
-        let output: isGradientOutput = { result: false, error: 'Invalid percentage' };
+        const output: isGradientOutput = { result: false, error: 'Invalid percentage' };
         return output;
       }
     }
 
-    let output: isGradientOutput = { result: true };
+    const output: isGradientOutput = { result: true };
     return output;
   }
 
@@ -108,7 +123,7 @@ class GradientToSVGFormat {
     }
 
     //^ Composing output
-    let output: regexCutOutput = {
+    const output: regexCutOutput = {
       result: {
         degrees: cuttedAndSlicedInput[0],
         id: cuttedAndSlicedInput[1],
@@ -116,6 +131,24 @@ class GradientToSVGFormat {
       },
     };
     return output;
+  }
+
+  public construct() {
+    //^ Declaring input as parsed info
+    const input = this.regexCut(this.info);
+
+    //^ If regexCut returns error than returns error
+    if (typeof input.error === 'string') {
+      return { error: 'Invalid gradient' };
+    }
+
+    //^ Declaring SVG stops parameter
+    const SVGStop = (percent: string, color: string) => {
+      return `
+         <stop offset="${percent}" stop-color="${color}"/>
+      `;
+    };
+    //TODO: finish this method and make tests
   }
 }
 

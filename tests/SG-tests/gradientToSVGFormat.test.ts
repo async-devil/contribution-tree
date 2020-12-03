@@ -15,7 +15,7 @@ const correctValuesTestExpect: string = `
 describe('IsGradient method tests', () => {
   describe('Correct values', () => {
     test('Gradient test with correct value', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.isGradient(
           'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
@@ -24,7 +24,7 @@ describe('IsGradient method tests', () => {
     });
 
     test('Gradient test with correct value with 3 numbers hex', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.isGradient(
           'linear-gradient(0deg, id="Gradient1", #e5a 0%, #d78 25%, #cd6 50%, #c44 75%, #9d3 100%)',
@@ -33,7 +33,7 @@ describe('IsGradient method tests', () => {
     });
 
     test('Gradient test without linear-gradient() prefix', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.isGradient(
           '0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%',
@@ -44,7 +44,7 @@ describe('IsGradient method tests', () => {
 
   describe('Incorrect values', () => {
     test('Gradient test with incorrect degrees', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.isGradient(
           'linear-gradient(0d, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
@@ -53,7 +53,7 @@ describe('IsGradient method tests', () => {
     });
 
     test('Gradient test with incorrect id', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.isGradient(
           'linear-gradient(0deg, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
@@ -62,7 +62,7 @@ describe('IsGradient method tests', () => {
     });
 
     test('Gradient test with rgb', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.isGradient(
           'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, rgb(0,0,99) 50%, #c44677 75%, #9d325c 100%)',
@@ -71,7 +71,7 @@ describe('IsGradient method tests', () => {
     });
 
     test('Gradient test with incorrect percentage in stop info', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.isGradient(
           'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25, #cd648d 50%, #c44677 75%, #9d325c 100%)',
@@ -80,7 +80,7 @@ describe('IsGradient method tests', () => {
     });
 
     test('Gradient test with incorrect hex in stop info', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.isGradient(
           'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
@@ -89,7 +89,7 @@ describe('IsGradient method tests', () => {
     });
 
     test('Gradient test with non gradient info', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(GTSF.isGradient('#e5afc4')).toStrictEqual({
         result: false,
         error: 'Invalid gradient data',
@@ -97,7 +97,7 @@ describe('IsGradient method tests', () => {
     });
 
     test('Gradient test without stop point info', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(GTSF.isGradient('linear-gradient(0deg, id="Gradient1")')).toStrictEqual({
         result: false,
         error: 'Invalid gradient data',
@@ -105,7 +105,7 @@ describe('IsGradient method tests', () => {
     });
 
     test('Gradient test without linear-gradient prefix', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.isGradient(
           '(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
@@ -122,7 +122,7 @@ describe('IsGradient method tests', () => {
 describe('regExCut method tests', () => {
   describe('Correct values', () => {
     test('Gradient test with correct value', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.regexCut(
           'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
@@ -143,7 +143,7 @@ describe('regExCut method tests', () => {
     });
 
     test('Gradient test with correct value with 3 numbers hex', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.regexCut(
           'linear-gradient(0deg, id="Gradient1", #e5a 0%, #d78 25%, #cd6 50%, #c44 75%, #9d3 100%)',
@@ -164,7 +164,7 @@ describe('regExCut method tests', () => {
     });
 
     test('Gradient test without linear-gradient() prefix', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.regexCut(
           '0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%',
@@ -187,7 +187,7 @@ describe('regExCut method tests', () => {
 
   describe('Incorrect values', () => {
     test('Cut test with incorrect degrees', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.regexCut(
           'linear-gradient(0d, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
@@ -196,7 +196,7 @@ describe('regExCut method tests', () => {
     });
 
     test('Cut test with incorrect id', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.regexCut(
           'linear-gradient(0deg, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
@@ -205,7 +205,7 @@ describe('regExCut method tests', () => {
     });
 
     test('Cut test with rgb', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.regexCut(
           'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, rgb(0,0,99) 50%, #c44677 75%, #9d325c 100%)',
@@ -214,7 +214,7 @@ describe('regExCut method tests', () => {
     });
 
     test('Cut test with incorrect percentage in stop info', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.regexCut(
           'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25, #cd648d 50%, #c44677 75%, #9d325c 100%)',
@@ -223,7 +223,7 @@ describe('regExCut method tests', () => {
     });
 
     test('Cut test with incorrect hex in stop info', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.regexCut(
           'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
@@ -232,21 +232,21 @@ describe('regExCut method tests', () => {
     });
 
     test('Cut test with non gradient info', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(GTSF.regexCut('#e5afc4')).toStrictEqual({
         error: 'Invalid gradient data',
       });
     });
 
     test('Cut test without stop point info', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(GTSF.regexCut('linear-gradient(0deg, id="Gradient1")')).toStrictEqual({
         error: 'Invalid gradient data',
       });
     });
 
     test('Cut test without linear-gradient prefix', () => {
-      let GTSF = new GradientToSVGFormat();
+      const GTSF = new GradientToSVGFormat('mock');
       expect(
         GTSF.regexCut(
           '(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',

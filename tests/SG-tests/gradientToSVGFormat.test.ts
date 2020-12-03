@@ -1,3 +1,4 @@
+import { SSL_OP_ALL } from 'constants';
 import { GradientToSVGFormat } from '../../api/StandartGraph/SG-Styles';
 
 const correctValuesTestExpect: string = `
@@ -9,6 +10,7 @@ const correctValuesTestExpect: string = `
 <stop offset="100%" stop-color="#9d325c">\n
 </linearGradient>
 `;
+/*------------------------------------------------------------------------------------------*/
 
 describe('IsGradient method tests', () => {
   describe('Correct values', () => {
@@ -16,7 +18,7 @@ describe('IsGradient method tests', () => {
       let GTSF = new GradientToSVGFormat();
       expect(
         GTSF.isGradient(
-          'linear-gradient(0deg, id=Gradient1, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+          'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
         ),
       ).toStrictEqual({ result: true });
     });
@@ -25,7 +27,7 @@ describe('IsGradient method tests', () => {
       let GTSF = new GradientToSVGFormat();
       expect(
         GTSF.isGradient(
-          'linear-gradient(0deg, id=Gradient1, #e5a 0%, #d78 25%, #cd6 50%, #c44 75%, #9d3 100%)',
+          'linear-gradient(0deg, id="Gradient1", #e5a 0%, #d78 25%, #cd6 50%, #c44 75%, #9d3 100%)',
         ),
       ).toStrictEqual({ result: true });
     });
@@ -34,7 +36,7 @@ describe('IsGradient method tests', () => {
       let GTSF = new GradientToSVGFormat();
       expect(
         GTSF.isGradient(
-          '0deg, id=Gradient1, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%',
+          '0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%',
         ),
       ).toStrictEqual({ result: true });
     });
@@ -45,7 +47,7 @@ describe('IsGradient method tests', () => {
       let GTSF = new GradientToSVGFormat();
       expect(
         GTSF.isGradient(
-          'linear-gradient(0d, id=Gradient1, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+          'linear-gradient(0d, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
         ),
       ).toStrictEqual({ result: false, error: 'Invalid degrees' });
     });
@@ -63,7 +65,7 @@ describe('IsGradient method tests', () => {
       let GTSF = new GradientToSVGFormat();
       expect(
         GTSF.isGradient(
-          'linear-gradient(0deg, id=Gradient1, #e5afc4 0%, #d782a3 25%, rgb(0,0,99) 50%, #c44677 75%, #9d325c 100%)',
+          'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, rgb(0,0,99) 50%, #c44677 75%, #9d325c 100%)',
         ),
       ).toStrictEqual({ result: false, error: 'Invalid color' });
     });
@@ -72,7 +74,7 @@ describe('IsGradient method tests', () => {
       let GTSF = new GradientToSVGFormat();
       expect(
         GTSF.isGradient(
-          'linear-gradient(0deg, id=Gradient1, #e5afc4 0%, #d782a3 25, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+          'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25, #cd648d 50%, #c44677 75%, #9d325c 100%)',
         ),
       ).toStrictEqual({ result: false, error: 'Invalid percentage' });
     });
@@ -81,7 +83,7 @@ describe('IsGradient method tests', () => {
       let GTSF = new GradientToSVGFormat();
       expect(
         GTSF.isGradient(
-          'linear-gradient(0deg, id=Gradient1, #e5afc4 0%, #d782 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+          'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
         ),
       ).toStrictEqual({ result: false, error: 'Invalid color' });
     });
@@ -96,7 +98,7 @@ describe('IsGradient method tests', () => {
 
     test('Gradient test without stop point info', () => {
       let GTSF = new GradientToSVGFormat();
-      expect(GTSF.isGradient('linear-gradient(0deg, id=Gradient1)')).toStrictEqual({
+      expect(GTSF.isGradient('linear-gradient(0deg, id="Gradient1")')).toStrictEqual({
         result: false,
         error: 'Invalid gradient data',
       });
@@ -106,15 +108,152 @@ describe('IsGradient method tests', () => {
       let GTSF = new GradientToSVGFormat();
       expect(
         GTSF.isGradient(
-          '(0deg, id=Gradient1, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+          '(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
         ),
       ).toStrictEqual({ result: false, error: 'Invalid degrees' });
     });
   });
 });
 
-// describe('Convert method tests', () => {
-//   test('Gradient test with correct data', () => {
-//     expect(GradientToSVGFormat.convert()).toBe(correctValuesTestExpect);
-//   });
-// });
+/*------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------*/
+
+describe('regExCut method tests', () => {
+  describe('Correct values', () => {
+    test('Gradient test with correct value', () => {
+      let GTSF = new GradientToSVGFormat();
+      expect(
+        GTSF.regexCut(
+          'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+        ),
+      ).toStrictEqual({
+        result: {
+          degrees: '0deg',
+          id: 'id="Gradient1"',
+          points: [
+            ['#e5afc4', '0%'],
+            ['#d782a3', '25%'],
+            ['#cd648d', '50%'],
+            ['#c44677', '75%'],
+            ['#9d325c', '100%'],
+          ],
+        },
+      });
+    });
+
+    test('Gradient test with correct value with 3 numbers hex', () => {
+      let GTSF = new GradientToSVGFormat();
+      expect(
+        GTSF.regexCut(
+          'linear-gradient(0deg, id="Gradient1", #e5a 0%, #d78 25%, #cd6 50%, #c44 75%, #9d3 100%)',
+        ),
+      ).toStrictEqual({
+        result: {
+          degrees: '0deg',
+          id: 'id="Gradient1"',
+          points: [
+            ['#e5a', '0%'],
+            ['#d78', '25%'],
+            ['#cd6', '50%'],
+            ['#c44', '75%'],
+            ['#9d3', '100%'],
+          ],
+        },
+      });
+    });
+
+    test('Gradient test without linear-gradient() prefix', () => {
+      let GTSF = new GradientToSVGFormat();
+      expect(
+        GTSF.regexCut(
+          '0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%',
+        ),
+      ).toStrictEqual({
+        result: {
+          degrees: '0deg',
+          id: 'id="Gradient1"',
+          points: [
+            ['#e5afc4', '0%'],
+            ['#d782a3', '25%'],
+            ['#cd648d', '50%'],
+            ['#c44677', '75%'],
+            ['#9d325c', '100%'],
+          ],
+        },
+      });
+    });
+  });
+
+  describe('Incorrect values', () => {
+    test('Cut test with incorrect degrees', () => {
+      let GTSF = new GradientToSVGFormat();
+      expect(
+        GTSF.regexCut(
+          'linear-gradient(0d, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+        ),
+      ).toStrictEqual({ error: 'Invalid degrees' });
+    });
+
+    test('Cut test with incorrect id', () => {
+      let GTSF = new GradientToSVGFormat();
+      expect(
+        GTSF.regexCut(
+          'linear-gradient(0deg, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+        ),
+      ).toStrictEqual({ error: 'Invalid ID' });
+    });
+
+    test('Cut test with rgb', () => {
+      let GTSF = new GradientToSVGFormat();
+      expect(
+        GTSF.regexCut(
+          'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, rgb(0,0,99) 50%, #c44677 75%, #9d325c 100%)',
+        ),
+      ).toStrictEqual({ error: 'Invalid color' });
+    });
+
+    test('Cut test with incorrect percentage in stop info', () => {
+      let GTSF = new GradientToSVGFormat();
+      expect(
+        GTSF.regexCut(
+          'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+        ),
+      ).toStrictEqual({ error: 'Invalid percentage' });
+    });
+
+    test('Cut test with incorrect hex in stop info', () => {
+      let GTSF = new GradientToSVGFormat();
+      expect(
+        GTSF.regexCut(
+          'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+        ),
+      ).toStrictEqual({ error: 'Invalid color' });
+    });
+
+    test('Cut test with non gradient info', () => {
+      let GTSF = new GradientToSVGFormat();
+      expect(GTSF.regexCut('#e5afc4')).toStrictEqual({
+        error: 'Invalid gradient data',
+      });
+    });
+
+    test('Cut test without stop point info', () => {
+      let GTSF = new GradientToSVGFormat();
+      expect(GTSF.regexCut('linear-gradient(0deg, id="Gradient1")')).toStrictEqual({
+        error: 'Invalid gradient data',
+      });
+    });
+
+    test('Cut test without linear-gradient prefix', () => {
+      let GTSF = new GradientToSVGFormat();
+      expect(
+        GTSF.regexCut(
+          '(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+        ),
+      ).toStrictEqual({ error: 'Invalid degrees' });
+    });
+  });
+});
+
+/*------------------------------------------------------------------------------------------*/

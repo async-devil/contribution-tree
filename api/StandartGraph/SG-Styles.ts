@@ -56,7 +56,7 @@ class GradientToSVGFormat {
     }
 
     //^ If id not found returns false
-    if (gradientDataArray[1].search(/^id=.*$/gm) === -1) {
+    if (gradientDataArray[1].search(/^id=".*"$/gm) === -1) {
       let output: isGradientOutput = { result: false, error: 'Invalid ID' };
       return output;
     }
@@ -115,7 +115,7 @@ class GradientToSVGFormat {
         points: inputPoints,
       },
     };
-    return output; //TODO: write tests
+    return output;
   }
 }
 

@@ -148,7 +148,26 @@ class GradientToSVGFormat {
          <stop offset="${percent}" stop-color="${color}"/>
       `;
     };
-    //TODO: finish this method and make tests
+
+    //^ Declaring html output composer
+    const htmlOutput = (id: string, XY: string, SVGStops: string) => {
+      return `
+      <linearGradient ${id} ${XY}>
+      ${SVGStops}
+      </linearGradient>
+      `;
+    };
+
+    //^ Declaring css output composer
+    const cssOutput = (id:string) => {
+      const cssId = id.replace(/(^id=)|(")/gm, '');
+      return `
+      fill: url(#${cssId})
+      `;
+    };
+
+    let SVGStops:string[] = []
+    for(let i = 0; i< input.result.points.length) //TODO: fix input.result undefined bug
   }
 }
 

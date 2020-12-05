@@ -101,6 +101,39 @@ class GradientToSVGFormat {
     return output;
   }
 
+  public degreesToSVGXY(deg: string) {
+    //^ Cutting % and transforming string to integer
+    let degInt = parseInt(deg.replace('%', ''));
+
+    //^ Transforms 1 to 45 etc
+    const degreesToStandart = (deg: number) => {
+      if (deg === 360) return 0;
+      for (let index = 0; index != 360; index += 45) {
+        if (deg > index && deg <= index + 45) return index + 45;
+      }
+      return deg;
+    };
+    degInt = degreesToStandart(degInt);
+
+    //^ Declaring x and y parametrs composer
+    const fill = (x1: number, y1: number, x2: number, y2: number) => {
+      return `x1="${x1}%" y1="${y1}%" x2="${x2}%" y2="${y2}%"`;
+    };
+
+    //^ Returning coords depending on the degrees
+    //TODO: make it less lame, make algorithm or smth
+    if (degInt === 0) return fill(0, 100, 0, 0);
+    if (degInt === 45) return fill(0, 100, 100, 0);
+    if (degInt === 90) return fill(0, 0, 100, 0);
+    if (degInt === 135) return fill(0, 0, 100, 100);
+    if (degInt === 180) return fill(0, 0, 0, 100);
+    if (degInt === 225) return fill(100, 0, 0, 100);
+    if (degInt === 270) return fill(100, 0, 0, 0);
+    if (degInt === 315) return fill(100, 100, 0, 0);
+
+    return fill(0, 100, 0, 0);
+  }
+
   public regexCut(input: string) {
     //^ Checking if input is a valid gradient
     const isGradient = this.isGradient(input);
@@ -139,14 +172,14 @@ class GradientToSVGFormat {
 
     //^ If regexCut returns error than returns error
     if (typeof input.error === 'string') {
-      return { error: 'Invalid gradient' };
+      return { error: input.error };
     }
+
+    const result = input.result;
 
     //^ Declaring SVG stops parameter
     const SVGStop = (percent: string, color: string) => {
-      return `
-         <stop offset="${percent}" stop-color="${color}"/>
-      `;
+      return `<stop offset="${percent}" stop-color="${color}"/>`;
     };
 
     //^ Declaring html output composer
@@ -159,15 +192,27 @@ class GradientToSVGFormat {
     };
 
     //^ Declaring css output composer
-    const cssOutput = (id:string) => {
+    const cssOutput = (id: string) => {
       const cssId = id.replace(/(^id=)|(")/gm, '');
-      return `
-      fill: url(#${cssId})
-      `;
+      return `fill: url(#${cssId})`;
     };
 
-    let SVGStops:string[] = []
-    for(let i = 0; i< input.result.points.length) //TODO: fix input.result undefined bug
+    //^ Declaring SVG stops array
+    let buffer: string[] = [];
+    //^ Necessary check
+    if (result !== undefined) {
+      for (let i = 0; i < result.points.length; i += 1) {
+        buffer.push(SVGStop(result.points[i][1], result.points[i][0]));
+      }
+    } else return { error: 'result is undefined' };
+    const SVGStops = buffer.join('\n');
+
+    const output = {
+      html: htmlOutput(result.id, this.degreesToSVGXY(result.degrees), SVGStops),
+      css: cssOutput(result.id),
+    };
+
+    return { result: output };
   }
 }
 

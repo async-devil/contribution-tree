@@ -1,4 +1,4 @@
-import { GradientToSVGFormat } from '../../api/StandartGraph/SG-Styles';
+import GradientToSVGFormat from '../../api/StandartGraph/SG-GradientToSVG';
 
 //! Important message:
 //! I'm not a tester, so please don't criticise so much the way I tested

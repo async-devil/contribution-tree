@@ -4,6 +4,7 @@ interface Data {
 
 //! Please use colors in the same format
 interface Theme {
+  [key: string]: string;
   background: string;
   line: string;
   surface: string;
@@ -40,4 +41,4 @@ const themes: Data = {
   },
 };
 
-export { themes, Theme };
+export { themes, Theme, Data };

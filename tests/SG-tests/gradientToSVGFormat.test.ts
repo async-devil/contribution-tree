@@ -339,3 +339,41 @@ describe('Construct method tests', () => {
 });
 
 /*------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------*/
+
+describe('parcedGradientInfoToCSS tests', () => {
+  describe('Correct values', () => {
+    test('CSSGradient test with valid info', () => {
+      const GTSF = new GradientToSVGFormat('mock');
+      expect(
+        GTSF.parcedGradientInfoToCSS({
+          result: {
+            degrees: '0deg',
+            id: 'id="Gradient1"',
+            points: [
+              ['#e5afc4', '0%'],
+              ['#d782a3', '25%'],
+              ['#cd648d', '50%'],
+              ['#c44677', '75%'],
+              ['#9d325c', '100%'],
+            ],
+          },
+        }),
+      ).toBe(
+        'linear-gradient(0deg, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+      );
+    });
+  });
+
+  describe('Incorrect values', () => {
+    test('CSSGradient test if error appears', () => {
+      const GTSF = new GradientToSVGFormat('mock');
+      expect(GTSF.parcedGradientInfoToCSS({ error: 'Error' })).toBe(
+        'linear-gradient(green, lightgreen)',
+      );
+    });
+  });
+});
+
+/*------------------------------------------------------------------------------------------*/

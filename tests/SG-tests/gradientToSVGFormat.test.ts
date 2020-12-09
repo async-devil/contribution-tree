@@ -352,6 +352,24 @@ describe('parcedGradientInfoToCSS tests', () => {
             degrees: '0deg',
             id: 'id="Gradient1"',
             points: [
+              ['#e5a', '0%'],
+              ['#d78', '25%'],
+              ['#cd6', '50%'],
+              ['#c44', '75%'],
+              ['#9d3', '100%'],
+            ],
+          },
+        }),
+      ).toBe('linear-gradient(0deg, #e5a 0%, #d78 25%, #cd6 50%, #c44 75%, #9d3 100%)');
+    });
+    test('CSSGradient test with valid info', () => {
+      const GTSF = new GradientToSVGFormat('mock');
+      expect(
+        GTSF.parcedGradientInfoToCSS({
+          result: {
+            degrees: '0deg',
+            id: 'id="Gradient1"',
+            points: [
               ['#e5afc4', '0%'],
               ['#d782a3', '25%'],
               ['#cd648d', '50%'],

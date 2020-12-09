@@ -5,6 +5,17 @@ interface Data {
   [key: string]: Theme;
 }
 
+interface colorOrGradientOutput {
+  error?: string;
+  result?: {
+    CSS: string;
+    SVG?: {
+      CSS: string;
+      HTML: string;
+    };
+  };
+}
+
 class Styles {
   public choice: string;
 
@@ -12,15 +23,45 @@ class Styles {
     this.choice = choice;
   }
 
+  //^Matching theme, if theme not found returns default one
   public matchTheme(): Theme {
     return themes[this.choice] || themes.default;
   }
 
   public colorOrGradientParcer(data: string) {
+    //^ If data is hex, than returns data as CSS
     if (data.search(/(^#[0-9a-fA-F]{3}$)|(^#[0-9a-fA-F]{6}$)/gm) !== -1) {
-      return data;
+      const output: colorOrGradientOutput = {
+        result: {
+          CSS: data,
+        },
+      };
+      return output;
     }
-    //TODO: think over about different css color declarations
+
+    const gtsf = new GTSF(data);
+    const SVG = gtsf.construct();
+
+    //^ If data contains invalid info than returns error
+    if (SVG.error !== undefined || SVG.result === undefined) {
+      console.log(data, SVG.result); //TODO: fix bug
+      const output: colorOrGradientOutput = {
+        error: SVG.error,
+      };
+      return output;
+    }
+
+    const output: colorOrGradientOutput = {
+      result: {
+        CSS: gtsf.parcedGradientInfoToCSS(gtsf.regexCut(data)),
+        SVG: {
+          CSS: SVG.result.css,
+          HTML: SVG.result.html,
+        },
+      },
+    };
+
+    return output;
   }
 
   public gettingInfoFromThemes() {

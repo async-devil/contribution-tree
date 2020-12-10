@@ -10,7 +10,7 @@ describe('MatchTheme method tests', () => {
         background: '#ffffff',
         points: '#000000',
         surface:
-          'linear-gradient(0deg, id=Gradient1, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+          'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
       });
     });
     test('Checking if method founds blueGradient theme', () => {
@@ -20,7 +20,7 @@ describe('MatchTheme method tests', () => {
         background: '#ffffff',
         points: '#000000',
         surface:
-          'linear-gradient(0deg, id=Gradient1, #66b5cb 0%, #3e9db8 25%, #34849b 50%, #2a6b7e 75%, #205261 100%)',
+          'linear-gradient(0deg, id="Gradient1", #66b5cb 0%, #3e9db8 25%, #34849b 50%, #2a6b7e 75%, #205261 100%)',
       });
     });
   });
@@ -60,22 +60,24 @@ describe('ColorOrGradientParcer method tests', () => {
     });
     test('Checking if method returns valid gradient info', () => {
       const Style = new Styles('');
-      expect(
-        Style.colorOrGradientParcer(
-          'linear-gradient(0deg, id=Gradient1, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
-        ),
-      ).toStrictEqual({
-        result: {
-          CSS:
-            'linear-gradient(0deg, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
-          SVG: {
-            CSS: '',
-          },
-        },
-      });
+      const test = Style.colorOrGradientParcer(
+        'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+      );
+      expect(test).not.toHaveProperty('result.CSS', undefined);
+      expect(test).not.toHaveProperty('result.SVG.CSS', undefined);
+      expect(test).not.toHaveProperty('result.SVG.HTML', undefined);
     });
   });
 
-  describe('Incorrect values', () => {});
+  describe('Incorrect values', () => {
+    test('Checking if method returns valid gradient info', () => {
+      const Style = new Styles('');
+      const test = Style.colorOrGradientParcer(
+        'linear-gradient(0deg, id=Gradient1, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
+      );
+      expect(test).not.toHaveProperty('error', undefined);
+      expect(test).toHaveProperty('result', undefined);
+    });
+  });
 });
 /*------------------------------------------------------------------------------------------*/

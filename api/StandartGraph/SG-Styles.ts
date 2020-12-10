@@ -44,7 +44,6 @@ class Styles {
 
     //^ If data contains invalid info than returns error
     if (SVG.error !== undefined || SVG.result === undefined) {
-      console.log(data, SVG.result); //TODO: fix bug
       const output: colorOrGradientOutput = {
         error: SVG.error,
       };
@@ -64,12 +63,17 @@ class Styles {
     return output;
   }
 
+  public chooseColorDefiningWord(property: string) {
+    //TODO: create this method
+  }
+
   public gettingInfoFromThemes() {
     const theme: Theme = this.matchTheme();
 
     let parcedTheme: string[] = [];
     Object.keys(theme).map((key) => {
-      theme[key];
+      if (this.colorOrGradientParcer(theme[key]).error !== undefined) {
+      }
     });
   }
 }

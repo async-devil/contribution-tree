@@ -28,7 +28,7 @@ class Styles {
     return themes[this.choice] || themes.default;
   }
 
-  public colorOrGradientParcer(data: string) {
+  public colorOrGradientParcer(data: string): colorOrGradientOutput {
     //^ If data is hex, than returns data as CSS
     if (data.search(/(^#[0-9a-fA-F]{3}$)|(^#[0-9a-fA-F]{6}$)/gm) !== -1) {
       const output: colorOrGradientOutput = {
@@ -64,7 +64,16 @@ class Styles {
   }
 
   public chooseColorDefiningWord(property: string) {
-    //TODO: create this method
+    //^ Getting interface keys via its child
+    const keys = Object.keys(this.matchTheme());
+
+    //^ If keys don`t contain property, returns error
+    if (!keys.includes(property)) {
+      const output = {
+        error: 'Invalid property',
+      };
+      return output;
+    }
   }
 
   public gettingInfoFromThemes() {

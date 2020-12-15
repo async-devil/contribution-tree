@@ -74,6 +74,33 @@ class Styles {
       };
       return output;
     }
+
+    //^ Declaring parametrs of theme property
+    switch (property) {
+      case 'line':
+        return {
+          element: '.grid',
+          property: 'stroke',
+          html: true,
+        };
+      case 'backgroung':
+        return {
+          element: 'svg',
+          property: 'background',
+          html: false,
+        };
+      case 'points':
+        return {
+          element: '.points',
+          property: 'fill',
+        };
+      case 'surface':
+        return {
+          element: '.surfaces',
+          property: 'fill',
+          html: true,
+        };
+    }
   }
 
   public gettingInfoFromThemes() {

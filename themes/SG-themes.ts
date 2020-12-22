@@ -12,6 +12,11 @@ interface Theme {
 }
 
 const themes: Data = {
+  /*
+  ! Before changing please update to your purpuses:
+  & SG-Styles.ts on 79 line
+  & Styles.test.ts on 88 line
+  */
   default: {
     line: '#7a7a7a',
     background: '#ffffff',

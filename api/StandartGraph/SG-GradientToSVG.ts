@@ -24,7 +24,7 @@ class GradientToSVGFormat {
   readonly info;
 
   constructor(info: string) {
-    this.info = info;
+    this.info = info; //& Gradient string
   }
 
   public isGradient(input: string): isGradientOutput {
@@ -92,7 +92,7 @@ class GradientToSVGFormat {
   }
 
   public parcedGradientInfoToCSS(data: regexCutOutput): string {
-    //^ Checking if nothing gots wrong
+    //^ Checking if nothing got wrong
     if (data.error !== undefined || data.result === undefined)
       //^ If incorrect data appears returns this
       return `linear-gradient(green, lightgreen)`;

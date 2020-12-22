@@ -81,3 +81,67 @@ describe('ColorOrGradientParcer method tests', () => {
   });
 });
 /*------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------*/
+describe('chooseColorDefiningWord tests', () => {
+  describe('Correct values', () => {
+    test('Checking if properties return their words', () => {
+      const _Styles = new Styles('');
+      const testParameters = expect.objectContaining({
+        element: expect.any(String),
+        property: expect.any(String),
+        html: expect.any(Boolean),
+      });
+
+      expect(_Styles.chooseColorDefiningWord('line')).toEqual(testParameters);
+      expect(_Styles.chooseColorDefiningWord('background')).toEqual(testParameters);
+      expect(_Styles.chooseColorDefiningWord('points')).toEqual(testParameters);
+      expect(_Styles.chooseColorDefiningWord('surface')).toEqual(testParameters);
+    });
+  });
+
+  describe('Incorrect values', () => {
+    test('Checking if method returns error because of invalid property', () => {
+      const _Styles = new Styles('');
+      const test = _Styles.chooseColorDefiningWord('onlyForTestingPurposes');
+
+      expect(test).toEqual(
+        expect.objectContaining({
+          error: expect.any(String),
+        }),
+      );
+    });
+  });
+});
+/*------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------*/
+describe('gettingInfoFromThemes tests', () => {
+  describe('Correct values', () => {
+    test('Checking if method returns valid information', () => {
+      const _Styles = new Styles('blueGradient');
+      const test = _Styles.gettingInfoFromThemes();
+      const testParameters = expect.objectContaining({
+        line: expect.objectContaining({ value: { result: { css: expect.any(String) } } }),
+        background: expect.objectContaining({ value: { result: { css: expect.any(String) } } }),
+        points: expect.objectContaining({ value: { result: { css: expect.any(String) } } }),
+        surface: expect.objectContaining({ value: { result: expect.any(Object) } }),
+      });
+
+      expect(test).toEqual(testParameters);
+    });
+  });
+});
+/*------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------*/
+describe('cssConstruct tests', () => {
+  describe('Correct values', () => {
+    test('Checking if method returns valid css code', () => {
+      const _Styles = new Styles('');
+      const test = _Styles.cssConstruct('.points', 'fill', '#000');
+      expect(test).toEqual(expect.objectContaining({ result: { css: expect.any(String) } }));
+    });
+  });
+});
+/*------------------------------------------------------------------------------------------*/

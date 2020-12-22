@@ -24,6 +24,10 @@
             <line x1="86" x2="697" y1="301" y2="301"></line>
             <line x1="86" x2="697" y1="360" y2="360"></line>
         </g>
+        
+        <g class="surfaces">
+            <path class="first_set" d="M113,360 L113,192 L259,171 L405,179 L551,200 L697,204 L697,360 Z"></path>
+        </g>
         <g class="first_set points" data-setname="Our first data set">
             <circle cx="113" cy="192" data-value="7.2" r="2"></circle>
             <circle cx="259" cy="171" data-value="8.1" r="2"></circle>
@@ -31,9 +35,13 @@
             <circle cx="551" cy="200" data-value="6.8" r="2"></circle>
             <circle cx="697" cy="204" data-value="6.7" r="2"></circle>
         </g>
-        <g class="surfaces">
-            <path class="first_set" d="M113,360 L113,192 L259,171 L405,179 L551,200 L697,204 L697,360 Z"></path>
-        </g>
+        <linearGradient id="Gradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%"  style="stop-color: #e5afc4;stop-opacity:1" />
+            <stop offset="25%" style="stop-color: #d782a3;stop-opacity:1" />
+            <stop offset="50%" style="stop-color: #cd648d;stop-opacity:1" />
+            <stop offset="75%" style="stop-color: #c44677;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#9d325c;stop-opacity:1" />
+        </linearGradient>
 
         <style type="text/css">
             body {
@@ -42,7 +50,7 @@
             }
 
             svg {
-                fill:
+                background: linear-gradient(0deg,#66b5cb 0%, #3e9db8 25%, #34849b 50%, #2a6b7e 75%, #205261 100%)
             }
 
             .grid {
@@ -55,7 +63,7 @@
             }
 
             .surfaces {
-                background: linear-gradient(0deg, #e5afc4 0%, #d782a3 25%, #cd648d 50%, #c44677 75%, #9d325c 100%);
+                fill: url('#Gradient1')
             }
         </style>
     </svg>

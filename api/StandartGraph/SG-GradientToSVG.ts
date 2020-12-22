@@ -24,7 +24,7 @@ class GradientToSVGFormat {
   readonly info;
 
   constructor(info: string) {
-    this.info = info;
+    this.info = info; //& Gradient string
   }
 
   public isGradient(input: string): isGradientOutput {
@@ -89,6 +89,23 @@ class GradientToSVGFormat {
 
     const output: isGradientOutput = { result: true };
     return output;
+  }
+
+  public parcedGradientInfoToCSS(data: regexCutOutput): string {
+    //^ Checking if nothing got wrong
+    if (data.error !== undefined || data.result === undefined)
+      //^ If incorrect data appears returns this
+      return `linear-gradient(green, lightgreen)`;
+    const deg = data.result.degrees;
+
+    //^ Getting all points as a string
+    let buffer: string[] = [];
+    for (let i = 0; i < data.result.points.length; i += 1) {
+      buffer.push(`${data.result.points[i][0]} ${data.result.points[i][1]}`);
+    }
+    const points = buffer.join(', ');
+
+    return `linear-gradient(${deg}, ${points})`;
   }
 
   public degreesToSVGXY(deg: string): string {

@@ -28,6 +28,10 @@ class Styles {
     return themes[this.choice] || themes.default;
   }
 
+  public isValidTheme(): boolean {
+    return themes[this.choice] ? true : false;
+  }
+
   public colorOrGradientParcer(data: string): colorOrGradientOutput {
     //^ If data is hex, than returns data as CSS
     if (data.search(/(^#[0-9a-fA-F]{3}$)|(^#[0-9a-fA-F]{6}$)/gm) !== -1) {
@@ -81,9 +85,9 @@ class Styles {
         return {
           element: '.grid',
           property: 'stroke',
-          html: true,
+          html: false,
         };
-      case 'backgroung':
+      case 'background':
         return {
           element: 'svg',
           property: 'background',
@@ -93,6 +97,7 @@ class Styles {
         return {
           element: '.points',
           property: 'fill',
+          html: false,
         };
       case 'surface':
         return {
@@ -101,16 +106,59 @@ class Styles {
           html: true,
         };
     }
+    const output = {
+      error: 'Invalid property',
+    };
+    return output;
+  }
+
+  public cssConstruct(element: string, property: string, value: string) {
+    return {
+      result: {
+        css: `${element} {
+      ${property}: ${value} 
+    }`,
+      },
+    };
   }
 
   public gettingInfoFromThemes() {
     const theme: Theme = this.matchTheme();
 
-    let parcedTheme: string[] = [];
+    let parcedTheme: any = {};
+    //^ For each theme keys
     Object.keys(theme).map((key) => {
-      if (this.colorOrGradientParcer(theme[key]).error !== undefined) {
+      //^ If error doesn`t attached
+      if (this.colorOrGradientParcer(theme[key]).error === undefined) {
+        //^ Defining parcedTheme elements
+        parcedTheme[key] = this.chooseColorDefiningWord(key);
+        parcedTheme[key]['value'] = theme[key];
       }
     });
+
+    Object.keys(parcedTheme).map((key) => {
+      //^ If element has a html parametr
+      if (parcedTheme[key].html === true) {
+        const gtsf = new GTSF(parcedTheme[key].value);
+        const gradientCVGInfo = gtsf.construct();
+
+        //^ If error not attached
+        if (gradientCVGInfo.error === undefined || gradientCVGInfo.result !== undefined) {
+          parcedTheme[key].value = gradientCVGInfo;
+        } else {
+          //^ Else returning default value
+          parcedTheme[key].value = themes.default[key];
+        }
+      } else {
+        parcedTheme[key].value = this.cssConstruct(
+          parcedTheme[key].element,
+          parcedTheme[key].property,
+          parcedTheme[key].value,
+        );
+      }
+    });
+
+    return parcedTheme;
   }
 }
 

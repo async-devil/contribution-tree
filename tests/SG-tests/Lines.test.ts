@@ -1,4 +1,4 @@
-import { Constructor, Info } from '../../api/StandartGraph/SG-Constructor';
+import { Lines, Info } from '../../api/StandartGraph/SG-Lines';
 
 test('Generating 5x5 graph', () => {
   const info: Info = {
@@ -13,12 +13,11 @@ test('Generating 5x5 graph', () => {
     rows: 5,
     columns: 5,
     factor: 1,
+    choice: 'default',
   };
 
-  let graph = new Constructor(info);
-  expect(graph.generate())
-    .toBe(`<svg width=\"210\" height=\"110\" viewBox=\"0 0 210 110\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-<g class=\"grid x-grid\">
+  let graph = new Lines(info);
+  expect(graph.generate()).toBe(`<g class=\"grid x-grid\">
 <line x1=\"0\" y1=\"0\" x2=\"210\" y2=\"0\"/>
 <line x1=\"0\" y1=\"25\" x2=\"210\" y2=\"25\"/>
 <line x1=\"0\" y1=\"50\" x2=\"210\" y2=\"50\"/>
@@ -31,8 +30,7 @@ test('Generating 5x5 graph', () => {
 <line x1=\"110\" y1=\"0\" x2=\"110\" y2=\"110\"/>
 <line x1=\"160\" y1=\"0\" x2=\"160\" y2=\"110\"/>
 <line x1=\"210\" y1=\"0\" x2=\"210\" y2=\"110\"/>
-</g>
-</svg>`);
+</g>`);
 });
 
 test('Generating 5x5 graph with start points(20;20)', () => {
@@ -48,12 +46,11 @@ test('Generating 5x5 graph with start points(20;20)', () => {
     outsideWidth: 10,
     outsideHeight: 10,
     factor: 1,
+    choice: 'default',
   };
 
-  let graph = new Constructor(info);
-  expect(graph.generate())
-    .toBe(`<svg width=\"230\" height=\"130\" viewBox=\"0 0 230 130\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-<g class=\"grid x-grid\">
+  let graph = new Lines(info);
+  expect(graph.generate()).toBe(`<g class=\"grid x-grid\">
 <line x1=\"20\" y1=\"20\" x2=\"230\" y2=\"20\"/>
 <line x1=\"20\" y1=\"45\" x2=\"230\" y2=\"45\"/>
 <line x1=\"20\" y1=\"70\" x2=\"230\" y2=\"70\"/>
@@ -66,8 +63,7 @@ test('Generating 5x5 graph with start points(20;20)', () => {
 <line x1=\"130\" y1=\"20\" x2=\"130\" y2=\"130\"/>
 <line x1=\"180\" y1=\"20\" x2=\"180\" y2=\"130\"/>
 <line x1=\"230\" y1=\"20\" x2=\"230\" y2=\"130\"/>
-</g>
-</svg>`);
+</g>`);
 });
 
 test('Generating 5x5 graph with factor 2', () => {
@@ -83,12 +79,11 @@ test('Generating 5x5 graph with factor 2', () => {
     rows: 5,
     columns: 5,
     factor: 2,
+    choice: 'default',
   };
 
-  let graph = new Constructor(info);
-  expect(graph.generate())
-    .toBe(`<svg width=\"420\" height=\"220\" viewBox=\"0 0 420 220\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-<g class=\"grid x-grid\">
+  let graph = new Lines(info);
+  expect(graph.generate()).toBe(`<g class=\"grid x-grid\">
 <line x1=\"0\" y1=\"0\" x2=\"420\" y2=\"0\"/>
 <line x1=\"0\" y1=\"50\" x2=\"420\" y2=\"50\"/>
 <line x1=\"0\" y1=\"100\" x2=\"420\" y2=\"100\"/>
@@ -101,8 +96,7 @@ test('Generating 5x5 graph with factor 2', () => {
 <line x1=\"220\" y1=\"0\" x2=\"220\" y2=\"220\"/>
 <line x1=\"320\" y1=\"0\" x2=\"320\" y2=\"220\"/>
 <line x1=\"420\" y1=\"0\" x2=\"420\" y2=\"220\"/>
-</g>
-</svg>`);
+</g>`);
 });
 
 test('Generating 5x5 graph with factor 2 and start points(20;20)', () => {
@@ -118,12 +112,11 @@ test('Generating 5x5 graph with factor 2 and start points(20;20)', () => {
     rows: 5,
     columns: 5,
     factor: 2,
+    choice: 'default',
   };
 
-  let graph = new Constructor(info);
-  expect(graph.generate())
-    .toBe(`<svg width=\"460\" height=\"260\" viewBox=\"0 0 460 260\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\">
-<g class=\"grid x-grid\">
+  let graph = new Lines(info);
+  expect(graph.generate()).toBe(`<g class=\"grid x-grid\">
 <line x1=\"40\" y1=\"40\" x2=\"460\" y2=\"40\"/>
 <line x1=\"40\" y1=\"90\" x2=\"460\" y2=\"90\"/>
 <line x1=\"40\" y1=\"140\" x2=\"460\" y2=\"140\"/>
@@ -136,6 +129,5 @@ test('Generating 5x5 graph with factor 2 and start points(20;20)', () => {
 <line x1=\"260\" y1=\"40\" x2=\"260\" y2=\"260\"/>
 <line x1=\"360\" y1=\"40\" x2=\"360\" y2=\"260\"/>
 <line x1=\"460\" y1=\"40\" x2=\"460\" y2=\"260\"/>
-</g>
-</svg>`);
+</g>`);
 });

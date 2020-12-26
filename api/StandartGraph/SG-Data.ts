@@ -10,6 +10,7 @@ interface Info {
   outsideWidth: number;
   outsideHeight: number;
   factor: number;
+  choice: string;
 }
 
 class Data {

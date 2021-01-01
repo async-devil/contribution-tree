@@ -1,0 +1,49 @@
+{
+  "Jest common describes": {
+    "prefix": "jdesc",
+    "scope": "javascript, typescript",
+    "body": [
+      "describe('${1:Method name} tests', () => {",
+      "\tdescribe('Correct values', () => {",
+      "\t\t",
+      "\t});",
+      "",
+      "\tdescribe('Incorrect values', () => {",
+      "\t\t",
+      "\t});",
+      "});"
+    ]
+  },
+  "Jest method test": {
+    "prefix": "mtest",
+    "scope": "javascript, typescript",
+    "body": [
+      "test('${1:Method describe}', () => {",
+      "\tconst _${2:Class name} = new $2(${3:args});",
+      "\tconst test = _$2.${4:Method name}(${5:args});",
+      "\texpect(test);",
+      "});"
+    ]
+  },
+  "Dividing line": {
+    "prefix": "dline",
+    "scope": "javascript, typescript",
+    "body": [
+      "/*------------------------------------------------------------------------------------------*/"
+    ]
+  },
+  "Dividing line with information": {
+    "prefix": "diline",
+    "scope": "javascript, typescript",
+    "body": [
+      "/*---------------------------------------------${1:Text}---------------------------------------------*/"
+    ]
+  },
+  "Color dividing line": {
+    "prefix": "cdline",
+    "scope": "javascript, typescript",
+    "body": [
+      "//${1:Color}----------------------------------------${2:Text}--------------------------------------------------*/"
+    ]
+  }
+}

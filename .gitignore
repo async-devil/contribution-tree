@@ -109,3 +109,4 @@ src/public/css/main.css
 src/**/*.js
 src/**/*.map
 coverage
+build

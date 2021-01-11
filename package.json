@@ -7,7 +7,8 @@
     "lint": "eslint",
     "start-code": "nodemon src/index.ts",
     "start-scss": "sass --watch src/public/scss:src/public/css",
-    "test": "jest"
+    "test": "jest",
+    "docs": "npx jsdoc -r ./api -c jsdoc.json"
   },
   "repository": {
     "type": "git",
@@ -32,12 +33,14 @@
     "@types/node": "^14.14.14",
     "@types/source-map-support": "^0.5.3",
     "babel-jest": "^26.6.3",
+    "better-docs": "^2.3.2",
     "eslint": "^7.15.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.3.0",
     "jest": "^26.6.3",
+    "jsdoc": "^3.6.6",
     "nodemon": "^2.0.4",
     "prettier": "2.1.2",
     "source-map-support": "^0.5.19",

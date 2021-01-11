@@ -1,32 +1,73 @@
-interface isGradientOutput {
+/**
+ * Output of {@link isGradient} method
+ * @alias isGradientOutput
+ */
+type isGradientOutput = {
+  /** If gradient detected, result will be true, if not false*/
   result: boolean;
+  /** Error message, exists only if gradient hasn`t detected*/
   error?: string;
-}
+};
 
-interface regexCutOutput {
+/**
+ * Output of {@link regexCut} method
+ * @alias regexCutOutput
+ */
+type regexCutOutput = {
+  /** Error message, exists only if gradient is invalid or something went wrong*/
   error?: string;
+  /** Result, exist only if error hasn`t appeared*/
   result?: {
+    /** Degrees in format like: 50deg*/
     degrees: string;
+    /** Gradient ID in format like: id="Gradient"*/
     id: string;
+    /** Array of points
+     * @example [
+            ['#e5afc4', '0%'],
+            ['#d782a3', '25%'],
+            ['#cd648d', '50%'],
+            ['#c44677', '75%'],
+            ['#9d325c', '100%'],
+          ]
+     */
     points: Array<Array<string>>;
   };
-}
+};
 
-interface gradientToSVGOutput {
+/**
+ * Output of {@link gradientToSVG} method
+ * @alias gradientToSVGOutput
+ */
+type gradientToSVGOutput = {
+  /** Error message, exists only if gradient is invalid or something went wrong*/
   error?: string;
+  /** Result, exist only if error hasn`t appeared*/
   result?: {
+    /** HTML code of SVG gradient */
     html: string;
+    /** CSS code of SVG gradient */
     css: string;
   };
-}
+};
 
+/**
+ * Class which contains methods to analize and transform CSS-like gradients to SVG
+ */
 class GradientToSVGFormat {
+  /**
+   * @param {string} info CSS-like gradient
+   */
   readonly info;
 
   constructor(info: string) {
-    this.info = info; //& Gradient string
+    this.info = info;
   }
 
+  /**
+   * @param {string} input CSS-like gradient or random string
+   * @returns {isGradientOutput} {@link isGradientOutput}
+   */
   public isGradient(input: string): isGradientOutput {
     //^ If input contains rgb(...), returns false
     if (input.search(/rgb\(.*?\)/gm) !== -1) {
@@ -91,6 +132,11 @@ class GradientToSVGFormat {
     return output;
   }
 
+  /**
+   * Reversed method, transforms SVG-like gradient to CSS
+   * @param {regexCutOutput} data Parsed gradient in result object
+   * @returns {string} CSS-like gradient
+   */
   public parcedGradientInfoToCSS(data: regexCutOutput): string {
     //^ Checking if nothing got wrong
     if (data.error !== undefined || data.result === undefined)
@@ -108,6 +154,11 @@ class GradientToSVGFormat {
     return `linear-gradient(${deg}, ${points})`;
   }
 
+  /**
+   * Transform degrees into SVG XY, but returns only parced degrees like: 0, 45, 90, 135 etc. (n+45)
+   * @param {string} deg Degrees in format like: 50deg
+   * @returns {string} XY values in format like: x1="100%" y1="0%" x2="100%" y2="0%"
+   */
   public degreesToSVGXY(deg: string): string {
     //^ Cutting % and transforming string to integer
     let degInt = parseInt(deg.replace('%', ''));
@@ -141,6 +192,11 @@ class GradientToSVGFormat {
     return fill(0, 100, 0, 0);
   }
 
+  /**
+   * Transforms CSS-like gradient into parced gradient info
+   * @param {string} input CSS-like gradient
+   * @returns {regexCutOutput} {@link regexCutOutput}
+   */
   public regexCut(input: string): regexCutOutput {
     //^ Checking if input is a valid gradient
     const isGradient = this.isGradient(input);
@@ -172,7 +228,10 @@ class GradientToSVGFormat {
     };
     return output;
   }
-
+  /**
+   * Packs parced info from {@link regexCutOutput} into object
+   * @returns {gradientToSVGOutput} {@link gradientToSVGOutput}
+   */
   public construct(): gradientToSVGOutput {
     //^ Declaring input as parsed info
     const input = this.regexCut(this.info);

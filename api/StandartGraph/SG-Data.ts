@@ -1,4 +1,4 @@
-interface Info {
+type Info = {
   rows: number;
   columns: number;
   startPoints: {
@@ -11,7 +11,7 @@ interface Info {
   outsideHeight: number;
   factor: number;
   choice: string;
-}
+};
 
 class Data {
   readonly data: Info;

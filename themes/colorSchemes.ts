@@ -1,9 +1,9 @@
-interface Data {
-	[ key: string ]: any; 
-}
+type Data = {
+  [key: string]: any;
+};
 
 //! Please use colors in the same format
-const colorsSchemes:Data = {
+const colorsSchemes: Data = {
   default: {
     colorErr: '#000000',
     colorBg: '#8ed7a5',

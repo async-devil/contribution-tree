@@ -1,15 +1,15 @@
-interface Data {
+type Data = {
   [key: string]: Theme;
-}
+};
 
 //! Please use colors in the same format
-interface Theme {
+type Theme = {
   [key: string]: string;
   background: string;
   line: string;
   surface: string;
   points: string;
-}
+};
 
 const themes: Data = {
   /*

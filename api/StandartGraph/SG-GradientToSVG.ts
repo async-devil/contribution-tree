@@ -51,6 +51,26 @@ type gradientToSVGOutput = {
   };
 };
 
+/*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
+
 /**
  * Class which contains methods to analize and transform CSS-like gradients to SVG
  */

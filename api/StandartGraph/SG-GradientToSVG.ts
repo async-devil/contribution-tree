@@ -14,15 +14,11 @@ type isGradientOutput = {
  * @alias regexCutOutput
  */
 type regexCutOutput = {
-  /** Error message, exists only if gradient is invalid or something went wrong*/
-  error?: string;
-  /** Result, exist only if error hasn`t appeared*/
-  result?: {
-    /** Degrees in format like: 50deg*/
-    degrees: string;
-    /** Gradient ID in format like: id="Gradient"*/
-    id: string;
-    /** Array of points
+  /** Degrees in format like: 50deg*/
+  degrees: string;
+  /** Gradient ID in format like: id="Gradient"*/
+  id: string;
+  /** Array of points
      * @example [
             ['#e5afc4', '0%'],
             ['#d782a3', '25%'],
@@ -31,8 +27,7 @@ type regexCutOutput = {
             ['#9d325c', '100%'],
           ]
      */
-    points: Array<Array<string>>;
-  };
+  points: Array<Array<string>>;
 };
 
 /**
@@ -40,15 +35,10 @@ type regexCutOutput = {
  * @alias gradientToSVGOutput
  */
 type gradientToSVGOutput = {
-  /** Error message, exists only if gradient is invalid or something went wrong*/
-  error?: string;
-  /** Result, exist only if error hasn`t appeared*/
-  result?: {
-    /** HTML code of SVG gradient */
-    html: string;
-    /** CSS code of SVG gradient */
-    css: string;
-  };
+  /** HTML code of SVG gradient */
+  html: string;
+  /** CSS code of SVG gradient */
+  css: string;
 };
 
 /*
@@ -83,6 +73,8 @@ class GradientToSVGFormat {
   constructor(info: string) {
     this.info = info;
   }
+
+  /*------------------------------------------------------------------------------------------*/
 
   /**
    * @param {string} input CSS-like gradient or random string
@@ -152,30 +144,35 @@ class GradientToSVGFormat {
     return output;
   }
 
+  /*------------------------------------------------------------------------------------------*/
+
+  /*------------------------------------------------------------------------------------------*/
+
   /**
    * Reversed method, transforms SVG-like gradient to CSS
    * @param {regexCutOutput} data Parsed gradient in result object
    * @returns {string} CSS-like gradient
    */
-  public parcedGradientInfoToCSS(data: regexCutOutput): string {
-    //^ Checking if nothing got wrong
-    if (data.error !== undefined || data.result === undefined)
-      //^ If incorrect data appears returns this
-      return `linear-gradient(green, lightgreen)`;
-    const deg = data.result.degrees;
+  public parsedGradientInfoToCSS(data: regexCutOutput): string {
+    const deg = data.degrees;
+
+    let buffer: string[] = [];
 
     //^ Getting all points as a string
-    let buffer: string[] = [];
-    for (let i = 0; i < data.result.points.length; i += 1) {
-      buffer.push(`${data.result.points[i][0]} ${data.result.points[i][1]}`);
+    for (let i = 0; i < data.points.length; i += 1) {
+      buffer.push(`${data.points[i][0]} ${data.points[i][1]}`);
     }
-    const points = buffer.join(', ');
 
+    const points = buffer.join(', ');
     return `linear-gradient(${deg}, ${points})`;
   }
 
+  /*------------------------------------------------------------------------------------------*/
+
+  /*------------------------------------------------------------------------------------------*/
+
   /**
-   * Transform degrees into SVG XY, but returns only parced degrees like: 0, 45, 90, 135 etc. (n+45)
+   * Transform degrees into SVG XY, but returns only parsed degrees like: 0, 45, 90, 135 etc. (n+45)
    * @param {string} deg Degrees in format like: 50deg
    * @returns {string} XY values in format like: x1="100%" y1="0%" x2="100%" y2="0%"
    */
@@ -209,21 +206,24 @@ class GradientToSVGFormat {
     if (degInt === 270) return fill(100, 0, 0, 0);
     if (degInt === 315) return fill(100, 100, 0, 0);
 
-    return fill(0, 100, 0, 0);
+    return fill(0, 100, 0, 0); //? x1 y1 x2 y2
   }
 
+  /*------------------------------------------------------------------------------------------*/
+
+  /*------------------------------------------------------------------------------------------*/
+
   /**
-   * Transforms CSS-like gradient into parced gradient info
+   * Transforms CSS-like gradient into parsed gradient info
    * @param {string} input CSS-like gradient
-   * @returns {regexCutOutput} {@link regexCutOutput}
+   * @returns {regexCutOutput | Error} {@link regexCutOutput}
    */
   public regexCut(input: string): regexCutOutput {
     //^ Checking if input is a valid gradient
     const isGradient = this.isGradient(input);
     if (isGradient.result === false) {
-      //^ If not returns error description
-      let output: regexCutOutput = { error: isGradient.error };
-      return output;
+      //^ If not throws error description
+      throw new Error(isGradient.error);
     }
 
     //^ Slicing up input
@@ -240,29 +240,24 @@ class GradientToSVGFormat {
 
     //^ Composing output
     const output: regexCutOutput = {
-      result: {
-        degrees: cuttedAndSlicedInput[0],
-        id: cuttedAndSlicedInput[1],
-        points: inputPoints,
-      },
+      degrees: cuttedAndSlicedInput[0],
+      id: cuttedAndSlicedInput[1],
+      points: inputPoints,
     };
     return output;
   }
+
+  /*------------------------------------------------------------------------------------------*/
+
+  /*------------------------------------------------------------------------------------------*/
+
   /**
-   * Packs parced info from {@link regexCutOutput} into object
-   * @returns {gradientToSVGOutput} {@link gradientToSVGOutput}
+   * Packs parsed info from {@link regexCutOutput} into object
+   * @returns {gradientToSVGOutput | Error} {@link gradientToSVGOutput}
    */
   public construct(): gradientToSVGOutput {
     //^ Declaring input as parsed info
-    const input = this.regexCut(this.info);
-
-    //^ If regexCut returns error than returns error
-    if (typeof input.error === 'string') {
-      const output: gradientToSVGOutput = { error: input.error };
-      return output;
-    }
-
-    const result = input.result;
+    const regexcut = this.regexCut(this.info);
 
     //^ Declaring SVG stops parameter
     const SVGStop = (percent: string, color: string) => {
@@ -286,28 +281,22 @@ class GradientToSVGFormat {
 
     //^ Declaring SVG stops array
     let buffer: string[] = [];
-    //^ Necessary check
-    if (result !== undefined) {
-      for (let i = 0; i < result.points.length; i += 1) {
-        buffer.push(SVGStop(result.points[i][1], result.points[i][0]));
-      }
-    } else {
-      const output: gradientToSVGOutput = {
-        error: 'result is undefined',
-      };
-      return output;
+
+    for (let i = 0; i < regexcut.points.length; i += 1) {
+      buffer.push(SVGStop(regexcut.points[i][1], regexcut.points[i][0]));
     }
+
     const SVGStops = buffer.join('\n');
 
     const output: gradientToSVGOutput = {
-      result: {
-        html: htmlOutput(result.id, this.degreesToSVGXY(result.degrees), SVGStops),
-        css: cssOutput(result.id),
-      },
+      html: htmlOutput(regexcut.id, this.degreesToSVGXY(regexcut.degrees), SVGStops),
+      css: cssOutput(regexcut.id),
     };
 
     return output;
   }
+
+  /*------------------------------------------------------------------------------------------*/
 }
 
 export { GradientToSVGFormat as default };

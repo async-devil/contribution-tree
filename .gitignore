@@ -110,3 +110,4 @@ src/**/*.js
 src/**/*.map
 coverage
 build
+out

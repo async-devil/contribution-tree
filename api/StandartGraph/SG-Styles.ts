@@ -5,7 +5,7 @@ import GTSF from './SG-GradientToSVG';
  * Output of {@link colorOrGradient} method
  * @alias colorOrGradientOutput
  */
-type colorOrGradientOutput = {
+type ColorOrGradientOutput = {
   /** Type of output */
   type: string;
   result: {
@@ -22,25 +22,55 @@ type colorOrGradientOutput = {
 };
 
 /**
- * Type which is describing element and its properties
+ * Group of {@link Element}
  * @alias Elements
  */
 type Elements = {
   /** Element name */
-  [key: string]: Property;
+  [key: string]: Element;
 };
 
 /**
  * Component of {@link Elements}
- * @alias Property
+ * Type which is describing element and its properties
+ * @alias Element
  */
-type Property = {
+type Element = {
   /** HTML element which needs to be stylished */
   element: string;
   /** CSS property of element */
   property: string;
   /** Is HTML required (like in SVG) */
   html: boolean;
+};
+
+/**
+ * Component of {@link ParsedElements}
+ * Type which is describing parsed element and its properties
+ * @alias ParsedElement
+ */
+type ParsedElement = {
+  /** HTML element which needs to be stylished */
+  element: string;
+  /** CSS property of element */
+  property: string;
+  /** Is HTML required (like in SVG) */
+  html: boolean;
+  /** Values of element*/
+  value: {
+    /** CSS code of SVG gradient or just CSS code */
+    css: string;
+    /** HTML code of SVG gradient */
+    html?: string;
+  };
+};
+
+/**
+ * Group of {@link ParsedElement}
+ * @alias ParsedElements
+ */
+type ParsedElements = {
+  [key: string]: ParsedElement;
 };
 /*------------------------------------------------------------------------------------------*/
 
@@ -88,7 +118,17 @@ class Utilities {
 /*------------------------------------------------------------------------------------------*/
 
 /** Theme checking functionality */
-class CheckTheme extends Data {
+class CheckTheme {
+  protected selectedTheme: string = 'default';
+
+  /**
+   * Setter which allows setting name of the theme which is need to be checked
+   * @param {string} selectedTheme Name of the theme
+   */
+  public set setSelectedTheme(selectedTheme: string) {
+    this.selectedTheme = selectedTheme;
+  }
+
   /**
    * Matches theme by name, if theme not found returns default one
    * @returns {Theme}
@@ -133,7 +173,7 @@ class ColorOrGradient {
 
     //^ If data is hex, than returns data as CSS
     if (this.input.search(/(^#[0-9a-fA-F]{3}$)|(^#[0-9a-fA-F]{6}$)/gm) !== -1) {
-      const output: colorOrGradientOutput = {
+      const output: ColorOrGradientOutput = {
         type: 'color',
         result: {
           css: this.input,
@@ -142,11 +182,13 @@ class ColorOrGradient {
       return output;
     }
 
-    util.devLog(this.input);
     const gtsf = new GTSF(this.input);
+
+    util.devLog(this.input);
+    //^ Error can be here
     const SVG = gtsf.construct();
 
-    const output: colorOrGradientOutput = {
+    const output: ColorOrGradientOutput = {
       type: 'gradient',
       result: {
         css: gtsf.parsedGradientInfoToCSS(gtsf.regexCut(this.input)),
@@ -167,22 +209,32 @@ class ColorOrGradient {
 
 /** Class which contains methods to set CSS properties to graph element */
 class PropertyDefiningKey extends Data {
-  protected element: string;
+  protected element: string = '';
 
   /**
    * @param {string} selectedTheme Theme which is need to be parced
+   */
+  constructor(selectedTheme: string) {
+    super(selectedTheme);
+  }
+
+  /**
+   * Setter which allows setting element which is need to be checked
    * @param {string} element Graph element
    */
-  constructor(selectedTheme: string, element: string) {
-    super(selectedTheme);
+  public set setElement(element: string) {
     this.element = element;
   }
 
-  /** Getter which returns supported elements*/
+  /**
+   * Getter which returns supported elements
+   * @returns {Elements} Supported elements
+   */
   public get getElements(): Elements {
     return this.elements;
   }
 
+  /** Element properties are declaring here */
   protected elements: Elements = {
     line: {
       element: '.grid',
@@ -210,21 +262,23 @@ class PropertyDefiningKey extends Data {
    * Getter which returns CSS properties of specific graph element
    * @returns {Property|Error} Property object or error
    */
-  public get getResult(): Property {
+  public get getResult(): Element {
     return this.parse();
   }
 
-  private parse(): Property {
+  private parse(): Element {
     const util = new Utilities();
     util.devMode = false; //! DevMode enabling
 
-    const CT = new CheckTheme(this.selectedTheme);
+    const CT = new CheckTheme();
+    CT.setSelectedTheme = this.selectedTheme;
+
     //^ Getting type keys via its child
     const matchThemeKeys = Object.keys(CT.matchTheme());
 
     //^ If keys don`t contain property, throws error
     if (!matchThemeKeys.includes(this.element)) {
-      util.devLog(this.element);
+      util.devLog('Invalid property error: ' + this.element);
       throw new Error('Invalid property');
     }
 
@@ -236,8 +290,83 @@ class PropertyDefiningKey extends Data {
       }
     }
 
-    util.devLog(this.elements);
+    util.devLog('Parametrs not found error: ' + this.elements);
     throw new Error('Parametrs not found');
+  }
+}
+
+/*------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------*/
+
+/** Class which contains methods to transform theme elements into code */
+class ThemeElementsToCode extends Data {
+  /**
+   * @param {string} selectedTheme Theme which is need to be parced
+   */
+  constructor(selectedTheme: string) {
+    super(selectedTheme);
+  }
+
+  /**
+   * Method which transforms group of parametrs into CSS code
+   * @param {string} element HTML element which needs to be stylished
+   * @param {string} property CSS property of element
+   * @param {string} value CSS value
+   * @returns {string} CSS code
+   */
+  protected cssConstruct(element: string, property: string, value: string): Object {
+    return {
+      css: `${element} {
+      ${property}: ${value} 
+    }`,
+    };
+  }
+
+  /**
+   * Parcing info from theme into one object
+   * @returns {ParsedElements} {@link ParsedElements}
+   */
+  public gettingInfoFromTheme(): ParsedElements {
+    const CT = new CheckTheme();
+    CT.setSelectedTheme = this.selectedTheme;
+
+    const PDK = new PropertyDefiningKey(this.selectedTheme);
+
+    const theme: Theme = CT.matchTheme();
+
+    let parcedTheme: any = {};
+    //^ For each theme keys
+    Object.keys(theme).map((key) => {
+      let CoG = new ColorOrGradient(theme[key]);
+      try {
+        let test = CoG.getResult;
+      } catch (err) {
+        throw new Error(err.message);
+      }
+      //^ Defining parcedTheme elements
+      PDK.setElement = key;
+      parcedTheme[key] = PDK.getResult;
+      parcedTheme[key]['value'] = theme[key];
+    });
+
+    Object.keys(parcedTheme).map((key) => {
+      //^ If element has a html parametr
+      if (parcedTheme[key].html === true) {
+        const gtsf = new GTSF(parcedTheme[key].value);
+        const gradientSVGInfo = gtsf.construct();
+
+        parcedTheme[key].value = gradientSVGInfo;
+      } else {
+        parcedTheme[key].value = this.cssConstruct(
+          parcedTheme[key].element,
+          parcedTheme[key].property,
+          parcedTheme[key].value,
+        );
+      }
+    });
+
+    return parcedTheme;
   }
 }
 

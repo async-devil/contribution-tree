@@ -9,25 +9,29 @@ import { themes } from '../../themes/SG-themes';
 
 describe('CheckTheme tests', () => {
   test('Checking if matchTheme works correct', () => {
-    const _CheckTheme = new CheckTheme('default');
+    const _CheckTheme = new CheckTheme();
+    _CheckTheme.setSelectedTheme = 'default';
     const test = _CheckTheme.matchTheme();
     expect(test).toBe(themes.default);
   });
 
   test('Checking if matchTheme works correct with invalid theme name', () => {
-    const _CheckTheme = new CheckTheme('__neverUseThisInProduction');
+    const _CheckTheme = new CheckTheme();
+    _CheckTheme.setSelectedTheme = '__neverUseThisInProduction';
     const test = _CheckTheme.matchTheme();
     expect(test).toBe(themes.default);
   });
 
   test('Checking if isValidTheme works correct', () => {
-    const _CheckTheme = new CheckTheme('default');
+    const _CheckTheme = new CheckTheme();
+    _CheckTheme.setSelectedTheme = 'default';
     const test = _CheckTheme.isValidTheme();
     expect(test).toBe(true);
   });
 
   test('Checking if isValidTheme works correct with invalid theme name', () => {
-    const _CheckTheme = new CheckTheme('__neverUseThisInProduction');
+    const _CheckTheme = new CheckTheme();
+    _CheckTheme.setSelectedTheme = '__neverUseThisInProduction';
     const test = _CheckTheme.isValidTheme();
     expect(test).toBe(false);
   });
@@ -88,15 +92,28 @@ describe('colorOrGradient tests', () => {
 describe('PropertyDefiningKey tests', () => {
   describe('Correct values', () => {
     test('Checking if chooseColorDefiningWord method returs valid info', () => {
-      const _PropertyDefiningKey = new PropertyDefiningKey('default', 'line');
+      const _PropertyDefiningKey = new PropertyDefiningKey('default');
+      _PropertyDefiningKey.setElement = 'line';
       const test = _PropertyDefiningKey.getResult;
       expect(test).toBe(_PropertyDefiningKey.getElements.line);
+    });
+
+    test('Checking if chooseColorDefiningWord method returs valid info two times', () => {
+      const _PropertyDefiningKey = new PropertyDefiningKey('default');
+      _PropertyDefiningKey.setElement = 'line';
+      let test = _PropertyDefiningKey.getResult;
+      expect(test).toBe(_PropertyDefiningKey.getElements.line);
+
+      _PropertyDefiningKey.setElement = 'background';
+      test = _PropertyDefiningKey.getResult;
+      expect(test).toBe(_PropertyDefiningKey.getElements.background);
     });
   });
 
   describe('Incorrect values', () => {
     test('Checking if getResutlt throws error if input data is invalid', () => {
-      const _PropertyDefiningKey = new PropertyDefiningKey('default', '__neverUseThisInProduction');
+      const _PropertyDefiningKey = new PropertyDefiningKey('default');
+      _PropertyDefiningKey.setElement = '__neverUseThisInProduction';
       try {
         const test = _PropertyDefiningKey.getResult;
       } catch (err) {

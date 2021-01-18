@@ -266,11 +266,7 @@ class GradientToSVGFormat {
 
     //^ Declaring html output composer
     const htmlOutput = (id: string, XY: string, SVGStops: string) => {
-      return `
-      <linearGradient ${id} ${XY}>
-      ${SVGStops}
-      </linearGradient>
-      `;
+      return `<linearGradient ${id} ${XY}>\n${SVGStops}\n</linearGradient>`;
     };
 
     //^ Declaring css output composer

@@ -1,6 +1,6 @@
 import { Data, Info } from './SG-Data';
 import { Lines } from './SG-Lines';
-import { Styles } from './SG-Styles';
+import Styles from './SG-Styles';
 
 class Constructor extends Data {
   constructor(data: Info) {

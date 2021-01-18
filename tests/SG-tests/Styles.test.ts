@@ -2,7 +2,9 @@ import {
   CheckTheme,
   ColorOrGradient,
   PropertyDefiningKey,
+  ThemeElementsToCode,
 } from '../../api/StandartGraph/SG-Styles';
+import Styles from '../../api/StandartGraph/SG-Styles';
 import { themes } from '../../themes/SG-themes';
 
 /*------------------------------------------------------------------------------------------*/
@@ -116,6 +118,139 @@ describe('PropertyDefiningKey tests', () => {
       _PropertyDefiningKey.setElement = '__neverUseThisInProduction';
       try {
         const test = _PropertyDefiningKey.getResult;
+      } catch (err) {
+        expect(err.message).toStrictEqual('Invalid property');
+      }
+    });
+  });
+});
+
+/*------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------*/
+
+describe('ThemeElementsToCode tests', () => {
+  describe('Correct values', () => {
+    test('Checking if method returns valid data from default theme', () => {
+      const _ThemeElementsToCode = new ThemeElementsToCode('default');
+      const test = _ThemeElementsToCode.getResult;
+
+      expect(test).toStrictEqual({
+        line: {
+          element: '.grid',
+          property: 'stroke',
+          html: false,
+          value: {
+            css: expect.any(String),
+          },
+        },
+        background: {
+          element: 'svg',
+          property: 'background',
+          html: false,
+          value: {
+            css: expect.any(String),
+          },
+        },
+        points: {
+          element: '.points',
+          property: 'fill',
+          html: false,
+          value: {
+            css: expect.any(String),
+          },
+        },
+        surface: {
+          element: '.surfaces',
+          property: 'fill',
+          html: true,
+          value: {
+            css: expect.any(String),
+          },
+        },
+      });
+    });
+
+    test('Checking if method returns valid data from greenGradient theme', () => {
+      const _ThemeElementsToCode = new ThemeElementsToCode('greenGradient');
+      const test = _ThemeElementsToCode.getResult;
+
+      expect(test).toStrictEqual({
+        line: {
+          element: '.grid',
+          property: 'stroke',
+          html: false,
+          value: {
+            css: expect.any(String),
+          },
+        },
+        background: {
+          element: 'svg',
+          property: 'background',
+          html: false,
+          value: {
+            css: expect.any(String),
+          },
+        },
+        points: {
+          element: '.points',
+          property: 'fill',
+          html: false,
+          value: {
+            css: expect.any(String),
+          },
+        },
+        surface: {
+          element: '.surfaces',
+          property: 'fill',
+          html: true,
+          value: {
+            css: expect.any(String),
+            html: expect.any(String),
+          },
+        },
+      });
+    });
+  });
+
+  describe('Incorrect values', () => {
+    test('Checking if getResutlt throws error if input data is invalid', () => {
+      const _ThemeElementsToCode = new ThemeElementsToCode('__neverUseThisInProduction');
+      try {
+        const test = _ThemeElementsToCode.getResult;
+      } catch (err) {
+        expect(err.message).toStrictEqual('Invalid property');
+      }
+    });
+  });
+});
+
+/*------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------*/
+
+describe('Styles tests', () => {
+  describe('Correct values', () => {
+    test('Checking if transform method returs valid info', () => {
+      const _Styles = new Styles('default');
+      const test = _Styles.transform();
+      // console.log('Just CSS transform output:\n' + test);
+      expect(test).toStrictEqual(expect.any(String));
+    });
+
+    test('Checking if transform method returs valid info', () => {
+      const _Styles = new Styles('greenGradient');
+      const test = _Styles.transform();
+      // console.log('CSS + HTML transform output:\n' + test);
+      expect(test).toStrictEqual(expect.any(String));
+    });
+  });
+
+  describe('Incorrect values', () => {
+    test('Checking if getResutlt throws error if input data is invalid', () => {
+      const _Styles = new Styles('__neverUseThisInProduction');
+      try {
+        const test = _Styles.transform();
       } catch (err) {
         expect(err.message).toStrictEqual('Invalid property');
       }

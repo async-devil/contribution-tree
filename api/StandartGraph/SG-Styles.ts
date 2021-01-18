@@ -58,7 +58,19 @@ type ParsedElement = {
   html: boolean;
   /** Values of element*/
   value: {
-    /** CSS code of SVG gradient or just CSS code */
+    /**
+     * CSS code of SVG gradient or just CSS code
+     * 
+     * @example 
+     * // for SVG
+     * fill: url('#Gradient1')
+     * 
+     * @example 
+     * // CSS
+     * .points {
+                fill: #000;
+            }
+     */
     css: string;
     /** HTML code of SVG gradient */
     html?: string;
@@ -317,17 +329,23 @@ class ThemeElementsToCode extends Data {
    */
   protected cssConstruct(element: string, property: string, value: string): Object {
     return {
-      css: `${element} {
-      ${property}: ${value} 
-    }`,
+      css: `${element} {\n\t${property}: ${value}\n}`,
     };
+  }
+
+  /**
+   * Getter which returns parsed theme
+   * @returns {Property|Error} Property object or error
+   */
+  public get getResult(): ParsedElements {
+    return this.gettingInfoFromTheme();
   }
 
   /**
    * Parcing info from theme into one object
    * @returns {ParsedElements} {@link ParsedElements}
    */
-  public gettingInfoFromTheme(): ParsedElements {
+  protected gettingInfoFromTheme(): ParsedElements {
     const CT = new CheckTheme();
     CT.setSelectedTheme = this.selectedTheme;
 
@@ -354,9 +372,20 @@ class ThemeElementsToCode extends Data {
       //^ If element has a html parametr
       if (parcedTheme[key].html === true) {
         const gtsf = new GTSF(parcedTheme[key].value);
-        const gradientSVGInfo = gtsf.construct();
-
-        parcedTheme[key].value = gradientSVGInfo;
+        try {
+          const gradientSVGInfo = gtsf.construct();
+          parcedTheme[key].value = gradientSVGInfo;
+        } catch (err) {
+          //^ If value isn`t a color or gradient
+          if (typeof parcedTheme[key].value !== 'string') {
+            throw new Error(err.message);
+          }
+          parcedTheme[key].value = this.cssConstruct(
+            parcedTheme[key].element,
+            parcedTheme[key].property,
+            parcedTheme[key].value,
+          );
+        }
       } else {
         parcedTheme[key].value = this.cssConstruct(
           parcedTheme[key].element,
@@ -373,12 +402,46 @@ class ThemeElementsToCode extends Data {
 /*------------------------------------------------------------------------------------------*/
 
 class Styles extends Data {
+  /**
+   * @param {string} selectedTheme Theme which is need to be parced
+   */
   constructor(selectedTheme: string) {
     super(selectedTheme);
   }
 
-  protected transform() {}
+  /**
+   * Method which return string which is containing firstly HTML code if it exists and CSS code
+   * @returns {string} HTML and CSS code
+   */
+  public transform(): string {
+    const TETC = new ThemeElementsToCode(this.selectedTheme);
+    const data: ParsedElements = TETC.getResult;
+
+    let cssBuffer: string[] = ['<style type="text/css">'];
+    let htmlBuffer: string[] = [];
+
+    const dataKeys = Object.keys(data);
+    for (let i = 0; i < dataKeys.length; i += 1) {
+      if (data[dataKeys[i]].html === true) {
+        let check = data[dataKeys[i]].value.html;
+        if (check !== undefined) htmlBuffer.push(check);
+
+        /** Making from SVG gradient CSS into valid CSS. See: {@link ParsedElement} */
+        const css = `${data[dataKeys[i]].element} {\n\t${data[dataKeys[i]].value.css}\n}`;
+
+        cssBuffer.push(css);
+        continue;
+      }
+
+      cssBuffer.push(data[dataKeys[i]].value.css);
+    }
+
+    cssBuffer.push('</style>');
+    const result: string = htmlBuffer.join('\n') + '\n' + cssBuffer.join('\n');
+
+    return result;
+  }
 }
 
 export { Styles as default };
-export { CheckTheme, ColorOrGradient, PropertyDefiningKey };
+export { CheckTheme, ColorOrGradient, PropertyDefiningKey, ThemeElementsToCode };

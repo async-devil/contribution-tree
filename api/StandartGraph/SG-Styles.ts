@@ -421,6 +421,10 @@ class Styles extends Data {
       if (data[dataKeys[i]].html === true) {
         let check = data[dataKeys[i]].value.html;
         if (check !== undefined) htmlBuffer.push(check);
+        if (check === undefined) {
+          cssBuffer.push(data[dataKeys[i]].value.css);
+          continue;
+        }
 
         /** Making from SVG gradient CSS into valid CSS. See: {@link ParsedElement} */
         const css = `${data[dataKeys[i]].element} {\n\t${data[dataKeys[i]].value.css}\n}`;

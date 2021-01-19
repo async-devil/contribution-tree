@@ -88,12 +88,10 @@ type ParsedElements = {
 
 /** Data containing class */
 class Data {
-  public readonly selectedTheme: string;
-
   /**
    * @param selectedTheme Theme which is need to be parced
    */
-  constructor(selectedTheme: string) {
+  constructor(public readonly selectedTheme: string) {
     this.selectedTheme = selectedTheme;
   }
 }
@@ -105,7 +103,7 @@ class Data {
 /** Utilities functionality class */
 class Utilities {
   /** @param dev Dev logs enabling */
-  public dev: boolean = false;
+  protected dev: boolean = false;
 
   /**
    * Setter which can enable and disable devMode
@@ -164,10 +162,8 @@ class CheckTheme {
 
 /** Class which contains method to parse color or gradient into a CSS or SVG property */
 class ColorOrGradient {
-  private input: string;
-
   /** @param {string} input Hex color or CSS-like gradient */
-  constructor(input: string) {
+  constructor(private input: string) {
     this.input = input;
   }
 

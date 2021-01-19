@@ -1,6 +1,6 @@
 import { Lines, Info } from '../../api/StandartGraph/SG-Lines';
 
-test('Generating 5x5 graph', () => {
+test('Generating 4x4 graph', () => {
   const info: Info = {
     startPoints: {
       x: 0,
@@ -10,10 +10,9 @@ test('Generating 5x5 graph', () => {
     insideHeight: 100,
     outsideWidth: 10,
     outsideHeight: 10,
-    rows: 5,
-    columns: 5,
+    rows: 4,
+    columns: 4,
     factor: 1,
-    choice: 'default',
   };
 
   let graph = new Lines(info);
@@ -33,10 +32,10 @@ test('Generating 5x5 graph', () => {
 </g>`);
 });
 
-test('Generating 5x5 graph with start points(20;20)', () => {
+test('Generating 4x4 graph with start points(20;20)', () => {
   const info: Info = {
-    rows: 5,
-    columns: 5,
+    rows: 4,
+    columns: 4,
     startPoints: {
       x: 20,
       y: 20,
@@ -46,7 +45,6 @@ test('Generating 5x5 graph with start points(20;20)', () => {
     outsideWidth: 10,
     outsideHeight: 10,
     factor: 1,
-    choice: 'default',
   };
 
   let graph = new Lines(info);
@@ -66,7 +64,7 @@ test('Generating 5x5 graph with start points(20;20)', () => {
 </g>`);
 });
 
-test('Generating 5x5 graph with factor 2', () => {
+test('Generating 4x4 graph with factor 2', () => {
   const info: Info = {
     startPoints: {
       x: 0,
@@ -76,10 +74,9 @@ test('Generating 5x5 graph with factor 2', () => {
     insideHeight: 100,
     outsideWidth: 10,
     outsideHeight: 10,
-    rows: 5,
-    columns: 5,
+    rows: 4,
+    columns: 4,
     factor: 2,
-    choice: 'default',
   };
 
   let graph = new Lines(info);
@@ -99,7 +96,7 @@ test('Generating 5x5 graph with factor 2', () => {
 </g>`);
 });
 
-test('Generating 5x5 graph with factor 2 and start points(20;20)', () => {
+test('Generating 4x4 graph with factor 2 and start points(20;20)', () => {
   const info: Info = {
     startPoints: {
       x: 20,
@@ -109,10 +106,9 @@ test('Generating 5x5 graph with factor 2 and start points(20;20)', () => {
     insideHeight: 100,
     outsideWidth: 10,
     outsideHeight: 10,
-    rows: 5,
-    columns: 5,
+    rows: 4,
+    columns: 4,
     factor: 2,
-    choice: 'default',
   };
 
   let graph = new Lines(info);

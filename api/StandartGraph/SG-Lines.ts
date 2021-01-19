@@ -12,7 +12,7 @@ class Lines extends Data {
     ? startPointsX have same X coordinates the only differnce is Y
     ! Graph visualized in ./graph.md
     */
-    let yVals = this.startYPoints(this.data.rows - 1);
+    let yVals = this.startYPoints(this.data.rows);
     buffer.push(this.gStart('x'));
 
     //^ Pushing each x lines into buffer array
@@ -27,7 +27,7 @@ class Lines extends Data {
   public initY() {
     let buffer: string[] = [];
     //? Same situation as initX method has, but static are Y coordinates
-    let xVals = this.startXPoints(this.data.columns - 1);
+    let xVals = this.startXPoints(this.data.columns);
     buffer.push(this.gStart('y'));
 
     //^ Pushing each y lines into buffer array

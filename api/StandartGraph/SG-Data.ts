@@ -1,24 +1,30 @@
+/**
+ * Info about graph
+ * @alias Info */
 type Info = {
+  /** Number of rows */
   rows: number;
+  /** Number of colomns */
   columns: number;
+  /** X and Y of start point */
   startPoints: {
     x: number;
     y: number;
   };
+  /** Width of inner part of graph */
   insideWidth: number;
+  /** Height of inner part of graph */
   insideHeight: number;
+  /** Width of outer part of graph */
   outsideWidth: number;
+  /** Height of outer part of graph */
   outsideHeight: number;
+  /** Value which describes aspect ratio */
   factor: number;
-  choice: string;
 };
 
 class Data {
-  readonly data: Info;
-
-  constructor(data: Info) {
-    this.data = data;
-  }
+  constructor(protected readonly data: Info) {}
 
   // prettier-ignore
   public svgStart(): string {
@@ -62,6 +68,7 @@ class Data {
     + this.data.startPoints.y;
   }
 
+  /** @param {number} num Number of columns*/
   public startXPoints(num: number): number[] {
     let buffer: number[] = [];
     let startAndOut = this.data.startPoints.x + this.data.outsideWidth;
@@ -75,6 +82,8 @@ class Data {
     }
     return buffer;
   }
+
+  /** @param {number} num Number of rows*/
   public startYPoints(num: number): number[] {
     let buffer: number[] = [];
     for (let i = 0; i <= num; i++) {

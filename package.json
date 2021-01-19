@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "Git conributions parse",
   "main": "src/index.ts",
-  "type": "module",
   "scripts": {
     "lint": "eslint",
     "start-code": "nodemon src/index.ts",

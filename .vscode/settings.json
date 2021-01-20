@@ -8,6 +8,14 @@
   "better-comments.multilineComments": true,
   "better-comments.tags": [
     {
+      "tag": "BUG:",
+      "color": "#ff0000",
+      "strikethrough": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": true
+    },
+    {
       "tag": "!",
       "color": "#a60000",
       "strikethrough": false,

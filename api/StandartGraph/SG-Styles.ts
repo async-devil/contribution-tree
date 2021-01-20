@@ -180,7 +180,11 @@ class ColorOrGradient {
     util.devMode = false; //! DevMode enabling
 
     //^ If data is hex, than returns data as CSS
-    if (this.input.search(/(^#[0-9a-fA-F]{3}$)|(^#[0-9a-fA-F]{6}$)/gm) !== -1) {
+    if (
+      this.input.search(
+        /(^#[0-9a-fA-F]{3}$)|(^#[0-9a-fA-F]{6}$)|(^#[0-9a-fA-F]{4}$)|(^#[0-9a-fA-F]{8}$)/gm,
+      ) !== -1
+    ) {
       const output: ColorOrGradientOutput = {
         type: 'color',
         result: {

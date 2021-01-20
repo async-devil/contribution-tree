@@ -69,15 +69,6 @@ describe('IsGradient method tests', () => {
       ).toStrictEqual({ result: false, error: 'Invalid percentage' });
     });
 
-    test('Gradient test with incorrect hex in stop info', () => {
-      const GTSF = new GradientToSVGFormat('mock');
-      expect(
-        GTSF.isGradient(
-          'linear-gradient(0deg, id="Gradient1", #e5afc4 0%, #d782 25%, #cd648d 50%, #c44677 75%, #9d325c 100%)',
-        ),
-      ).toStrictEqual({ result: false, error: 'Invalid color' });
-    });
-
     test('Gradient test with non gradient info', () => {
       const GTSF = new GradientToSVGFormat('mock');
       expect(GTSF.isGradient('#e5afc4')).toStrictEqual({

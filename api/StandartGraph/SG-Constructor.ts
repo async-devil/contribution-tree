@@ -18,6 +18,10 @@ class Constructor extends Data {
     super(data);
   }
 
+  /**
+   * Method which constructs all up
+   * @returns {string} SVG graph
+   */
   public construct() {
     const _Lines = new Lines(this.data);
     const _Styles = new Styles(this.choice);
@@ -28,8 +32,8 @@ class Constructor extends Data {
     buffer.push(
       this.svgStart(),
       _Lines.generate(),
-      _Points.getPoints,
       _Surface.getSurface,
+      _Points.getPoints,
       _Styles.transform(),
       this.svgEnd,
     );
@@ -39,23 +43,3 @@ class Constructor extends Data {
 }
 
 export { Constructor };
-
-const CNSTR = new Constructor(
-  {
-    startPoints: {
-      x: 0,
-      y: 0,
-    },
-    insideWidth: 200,
-    insideHeight: 100,
-    outsideWidth: 10,
-    outsideHeight: 10,
-    rows: 4,
-    columns: 4,
-    factor: 1,
-  },
-  'default',
-  [0, 25, 50, 75],
-);
-
-console.log(CNSTR.construct());

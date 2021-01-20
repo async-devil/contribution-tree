@@ -128,7 +128,11 @@ class GradientToSVGFormat {
     //^ Grabbing each of stop point properties
     for (let i = 0; i < gradientStopsInfo.length; i += 1) {
       //^ Checking if color is a hex, if not returns false
-      if (gradientStopsInfo[i][0].search(/(^#[0-9a-fA-F]{3}$)|(^#[0-9a-fA-F]{6}$)/gm) === -1) {
+      if (
+        gradientStopsInfo[i][0].search(
+          /(^#[0-9a-fA-F]{3}$)|(^#[0-9a-fA-F]{6}$)|(^#[0-9a-fA-F]{4}$)|(^#[0-9a-fA-F]{8}$)/gm,
+        ) === -1
+      ) {
         const output: isGradientOutput = { result: false, error: 'Invalid color' };
         return output;
       }

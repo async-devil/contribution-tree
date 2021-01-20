@@ -43,15 +43,9 @@ class Data {
   }
   // prettier-ignore
   public line(x1: number, y1: number, x2: number, y2: number): string {
-    return `<line x1="${
-      x1 * this.data.factor
-    }" y1="${
-      y1 * this.data.factor
-    }" x2="${
+    return `\t<line x1="${x1 * this.data.factor}" y1="${y1 * this.data.factor}" x2="${
       x2 * this.data.factor
-    }" y2="${
-      y2 * this.data.factor
-    }"/>`;
+    }" y2="${y2 * this.data.factor}" stroke-width="${this.data.factor * 0.1}px"/>`;
   }
   public gEnd: string = `</g>`;
   public svgEnd: string = `</svg>`;

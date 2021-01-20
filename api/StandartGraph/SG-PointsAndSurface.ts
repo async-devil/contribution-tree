@@ -7,10 +7,9 @@ class Calc extends Data {
    */
   constructor(protected data: Info, protected pointsPercentage: Array<number>) {
     super(data);
-    if (pointsPercentage.length !== this.startYPoints(data.rows).length) {
-      // throw new Error('Invalid number of points');
-      console.log('tt');
-    }
+    // if (pointsPercentage.length !== this.startYPoints(data.rows).length) {
+    //   throw new Error('Invalid number of points');
+    // }
   }
 
   /**
@@ -23,19 +22,26 @@ class Calc extends Data {
 
   private calculate(): Array<Array<number>> {
     const sYp = this.startYPoints(this.data.rows);
-    const sXp = this.startXPoints(this.data.columns).reverse();
+    const sXp = this.startXPoints(this.data.columns);
 
     let buffer: Array<Array<number>> = [];
     for (let i = 0; i < sYp.length; i += 1) {
+      let y;
+      if (this.pointsPercentage[i] === 0) {
+        y = 100;
+      } else {
+        y = this.data.insideHeight - this.data.insideHeight * (this.pointsPercentage[i] / 100);
+      }
+
       buffer.push([
         //^ From last x to first x
         sXp[i],
         //^ StartPointY[i] + insideHeight * percentage[i] / 100 = y coordinate of point
-        sYp[0] + this.data.insideHeight * (this.pointsPercentage[i] / 100),
+        sYp[0] + y,
       ]);
 
-      //^ If i is index of last sXp element
-      if (i === sXp.length - 1) {
+      //^ If i is index of last sXp, sYp or pointsPercentrage element
+      if (i === sXp.length - 1 || i === sYp.length - 1 || i === this.pointsPercentage.length - 1) {
         break;
       }
     }
@@ -85,7 +91,6 @@ class Surface extends Calc {
 
     //^ Last point X coordinate and the lowest Y
     buffer.push(Lsvg(points[points.length - 1][0], sYp[0] + this.data.insideHeight), 'Z');
-    console.log(sYp[sYp.length - 1]);
 
     return `<g class="surfaces">\n\t<path d="${buffer.join(' ')}"></path>\n</g>`;
   }
@@ -113,7 +118,7 @@ class Points extends Calc {
 
     const circleLayout = (x: number, y: number): string => {
       return `<circle cx="${x * this.data.factor}" cy="${y * this.data.factor}" r="${
-        2 * this.data.factor
+        this.data.factor
       }"></circle> `;
     };
 

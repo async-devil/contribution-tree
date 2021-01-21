@@ -4,9 +4,8 @@
   "description": "Git conributions parse",
   "main": "src/index.ts",
   "scripts": {
+    "start": "nodemon src/index.ts",
     "lint": "eslint",
-    "start-code": "nodemon src/index.ts",
-    "start-scss": "sass --watch src/public/scss:src/public/css",
     "test": "jest",
     "docs": "npx jsdoc -r ./api -c jsdoc.json"
   },

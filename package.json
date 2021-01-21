@@ -4,7 +4,7 @@
   "description": "Git conributions parse",
   "main": "src/index.ts",
   "scripts": {
-    "start": "nodemon src/index.ts",
+    "start": "ts-node src/index.ts",
     "lint": "eslint",
     "test": "jest",
     "docs": "npx jsdoc -r ./api -c jsdoc.json"
@@ -43,16 +43,13 @@
     "nodemon": "^2.0.4",
     "prettier": "2.1.2",
     "source-map-support": "^0.5.19",
-    "ts-jest": "^26.4.4",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.0-dev.20210115"
+    "ts-jest": "^26.4.4"
   },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.3",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.0-dev.20210115",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "hbs": "^4.1.1",
-    "request": "^2.88.2"
+    "express": "^4.17.1"
   },
   "nodemonConfig": {
     "ignore": [

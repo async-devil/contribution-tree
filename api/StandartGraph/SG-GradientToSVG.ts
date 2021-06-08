@@ -200,17 +200,24 @@ class GradientToSVGFormat {
     };
 
     //^ Returning coords depending on the degrees
-    //TODO: make it less lame, make algorithm or smth
-    if (degInt === 0) return fill(0, 100, 0, 0);
-    if (degInt === 45) return fill(0, 100, 100, 0);
-    if (degInt === 90) return fill(0, 0, 100, 0);
-    if (degInt === 135) return fill(0, 0, 100, 100);
-    if (degInt === 180) return fill(0, 0, 0, 100);
-    if (degInt === 225) return fill(100, 0, 0, 100);
-    if (degInt === 270) return fill(100, 0, 0, 0);
-    if (degInt === 315) return fill(100, 100, 0, 0);
+    function setGradientAngle(deg: number) {
+      // Convert angle to radians
+      deg = (deg * Math.PI) / 180;
 
-    return fill(0, 100, 0, 0); //? x1 y1 x2 y2
+      // approximate height and width divided by 2
+      var cx = 100;
+      var cy = 50;
+
+      // sqrt(width^2 + height^2)/2
+      var radius = 111;
+
+      var rx = Math.cos(deg) * radius;
+      var ry = Math.sin(deg) * radius;
+
+      return fill(cx - rx, cy + ry, cx + rx, cy - ry); //? x1 y1 x2 y2
+    }
+
+    return setGradientAngle(degInt);
   }
 
   /*------------------------------------------------------------------------------------------*/

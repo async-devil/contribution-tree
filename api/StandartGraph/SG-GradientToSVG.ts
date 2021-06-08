@@ -201,25 +201,18 @@ class GradientToSVGFormat {
       degArr[changeIndex] = inPositive
         ? Math.floor(100 - (highestDeg - deg) * 2.2) //? 100/45=2.2
         : Math.floor((highestDeg - deg) * 2.2);
-      console.log(degArr);
 
       return fill(degArr[0], degArr[1], degArr[2], degArr[3]);
     }
 
     if (degInt >= 0 && degInt < 45) return calculateDegrees([0, 100, 0, 0], 2, true, degInt, 45);
-    if (degInt >= 45 && degInt < 90)
-      return calculateDegrees([0, 100, 100, 0], 1, false, degInt, 90);
+    if (degInt >= 45 && degInt < 90) return calculateDegrees([0, 100, 100, 0], 1, false, degInt, 90);
     if (degInt >= 90 && degInt < 135) return calculateDegrees([0, 0, 100, 0], 3, true, degInt, 135);
-    if (degInt >= 135 && degInt < 180)
-      return calculateDegrees([0, 0, 100, 100], 2, false, degInt, 180);
-    if (degInt >= 180 && degInt < 225)
-      return calculateDegrees([0, 0, 0, 100], 0, true, degInt, 225);
-    if (degInt >= 225 && degInt < 270)
-      return calculateDegrees([100, 0, 0, 100], 3, false, degInt, 270);
-    if (degInt >= 270 && degInt < 315)
-      return calculateDegrees([100, 0, 0, 0], 1, true, degInt, 315);
-    if (degInt >= 315 && degInt < 360)
-      return calculateDegrees([100, 100, 0, 0], 0, false, degInt, 360);
+    if (degInt >= 135 && degInt < 180) return calculateDegrees([0, 0, 100, 100], 2, false, degInt, 180);
+    if (degInt >= 180 && degInt < 225) return calculateDegrees([0, 0, 0, 100], 0, true, degInt, 225);
+    if (degInt >= 225 && degInt < 270) return calculateDegrees([100, 0, 0, 100], 3, false, degInt, 270);
+    if (degInt >= 270 && degInt < 315) return calculateDegrees([100, 0, 0, 0], 1, true, degInt, 315);
+    if (degInt >= 315 && degInt < 360) return calculateDegrees([100, 100, 0, 0], 0, false, degInt, 360);
 
     return fill(0, 100, 0, 0);
   }

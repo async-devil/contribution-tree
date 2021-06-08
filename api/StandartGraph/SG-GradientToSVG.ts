@@ -184,40 +184,44 @@ class GradientToSVGFormat {
     //^ Cutting % and transforming string to integer
     let degInt = parseInt(deg.replace('%', ''));
 
-    //^ Transforms 1 to 45 etc
-    const degreesToStandart = (deg: number) => {
-      if (deg === 360) return 0;
-      for (let index = 0; index != 360; index += 45) {
-        if (deg > index && deg <= index + 45) return index + 45;
-      }
-      return deg;
-    };
-    degInt = degreesToStandart(degInt);
-
     //^ Declaring x and y parametrs composer
     const fill = (x1: number, y1: number, x2: number, y2: number) => {
       return `x1="${x1}%" y1="${y1}%" x2="${x2}%" y2="${y2}%"`;
     };
 
     //^ Returning coords depending on the degrees
-    function setGradientAngle(deg: number) {
-      // Convert angle to radians
-      deg = (deg * Math.PI) / 180;
 
-      // approximate height and width divided by 2
-      var cx = 100;
-      var cy = 50;
+    function calculateDegrees(
+      degArr: number[],
+      changeIndex: number,
+      inPositive: boolean,
+      deg: number,
+      highestDeg: number,
+    ): string {
+      degArr[changeIndex] = inPositive
+        ? Math.floor(100 - (highestDeg - deg) * 2.2) //? 100/45=2.2
+        : Math.floor((highestDeg - deg) * 2.2);
+      console.log(degArr);
 
-      // sqrt(width^2 + height^2)/2
-      var radius = 111;
-
-      var rx = Math.cos(deg) * radius;
-      var ry = Math.sin(deg) * radius;
-
-      return fill(cx - rx, cy + ry, cx + rx, cy - ry); //? x1 y1 x2 y2
+      return fill(degArr[0], degArr[1], degArr[2], degArr[3]);
     }
 
-    return setGradientAngle(degInt);
+    if (degInt >= 0 && degInt < 45) return calculateDegrees([0, 100, 0, 0], 2, true, degInt, 45);
+    if (degInt >= 45 && degInt < 90)
+      return calculateDegrees([0, 100, 100, 0], 1, false, degInt, 90);
+    if (degInt >= 90 && degInt < 135) return calculateDegrees([0, 0, 100, 0], 3, true, degInt, 135);
+    if (degInt >= 135 && degInt < 180)
+      return calculateDegrees([0, 0, 100, 100], 2, false, degInt, 180);
+    if (degInt >= 180 && degInt < 225)
+      return calculateDegrees([0, 0, 0, 100], 0, true, degInt, 225);
+    if (degInt >= 225 && degInt < 270)
+      return calculateDegrees([100, 0, 0, 100], 3, false, degInt, 270);
+    if (degInt >= 270 && degInt < 315)
+      return calculateDegrees([100, 0, 0, 0], 1, true, degInt, 315);
+    if (degInt >= 315 && degInt < 360)
+      return calculateDegrees([100, 100, 0, 0], 0, false, degInt, 360);
+
+    return fill(0, 100, 0, 0);
   }
 
   /*------------------------------------------------------------------------------------------*/
